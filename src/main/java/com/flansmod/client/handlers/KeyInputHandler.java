@@ -219,6 +219,7 @@ public class KeyInputHandler
 						
 						data.reloadingRight = true;
 						data.burstRoundsRemainingRight = 0;
+						data.burstRoundsRemainingLeft = 0;
 					}
 				}
 			}

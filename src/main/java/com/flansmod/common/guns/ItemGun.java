@@ -348,12 +348,20 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				case BURST:
 				{
+					int burstRounds = data.GetBurstRoundsRemaining(hand);
 					//PlayerData burst rounds handled on client
-					if(data.GetBurstRoundsRemaining(hand) > 0)
-					{
+					if(burstRounds > 0) {
 						shouldShootThisTick = true;
+						data.SetBurstRoundsRemaining(hand, burstRounds - 1);
+					} else if (hold && !held) {
+						shouldShootThisTick = true;
+						//Subtract 1 for the current round being fired.
+						data.SetBurstRoundsRemaining(hand, type.numBurstRounds - 1);
+					} else {
+						needsToReload = false;
 					}
-					// Fallthrough to semi auto
+
+					break;
 				}
 				case SEMIAUTO:
 				{
@@ -494,9 +502,8 @@ public class ItemGun extends Item implements IPaintableItem
 				FlansMod.getPacketHandler().sendToServer(new PacketGunFire(hand));
 			
 			// For each 
-			while(shootTime <= 0.0f)
-			{
-				
+			while(shootTime <= 0.0f) {
+
 				// Add the delay for this shot and shoot it!
 				shootTime += type.GetShootDelay(gunstack);
 				
