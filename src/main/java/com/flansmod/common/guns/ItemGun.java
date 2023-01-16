@@ -91,11 +91,13 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 	
 	private int soundDelay = 0;
-	
+
 	private static boolean rightMouseHeld;
 	private static boolean lastRightMouseHeld;
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
+	private static boolean rightClickConsumed = false;
+	private static boolean leftClickConsumed = false;
 	
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
@@ -112,6 +114,31 @@ public class ItemGun extends Item implements IPaintableItem
 		else
 			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld;
 	}
+
+	private static boolean IsClickConsumed(EnumHand hand)
+	{
+		if(FlansMod.shootOnRightClick)
+			return hand == EnumHand.MAIN_HAND ? rightClickConsumed : leftClickConsumed;
+		else
+			return hand == EnumHand.MAIN_HAND ? leftClickConsumed : rightClickConsumed;
+	}
+
+	private static void ConsumeClick(EnumHand hand) {
+		if (FlansMod.shootOnRightClick) {
+			if (hand == EnumHand.MAIN_HAND) {
+				rightClickConsumed = true;
+			} else {
+				leftClickConsumed = true;
+			}
+		} else {
+			if (hand == EnumHand.MAIN_HAND) {
+				leftClickConsumed = true;
+			} else {
+				rightClickConsumed = true;
+			}
+		}
+	}
+
 	
 	public ItemGun(GunType type)
 	{
@@ -353,7 +380,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(burstRounds > 0) {
 						shouldShootThisTick = true;
 						data.SetBurstRoundsRemaining(hand, burstRounds - 1);
-					} else if (hold && !held) {
+					} else if (hold && !IsClickConsumed(hand)) {
 						shouldShootThisTick = true;
 						//Subtract 1 for the current round being fired.
 						data.SetBurstRoundsRemaining(hand, type.numBurstRounds - 1);
@@ -365,7 +392,7 @@ public class ItemGun extends Item implements IPaintableItem
 				}
 				case SEMIAUTO:
 				{
-					if(hold && !held)
+					if(hold && !IsClickConsumed(hand))
 					{
 						shouldShootThisTick = true;
 					}
@@ -439,6 +466,7 @@ public class ItemGun extends Item implements IPaintableItem
 			else if(shouldShootThisTick)
 			{
 				shoot(hand, player, gunstack, data, world, animations);
+				ConsumeClick(hand);
 			}
 		}
 	}
@@ -717,6 +745,12 @@ public class ItemGun extends Item implements IPaintableItem
 				lastLeftMouseHeld = leftMouseHeld;
 				rightMouseHeld = Mouse.isButtonDown(1);
 				leftMouseHeld = Mouse.isButtonDown(0);
+				if (!rightMouseHeld) {
+					rightClickConsumed = false;
+				}
+				if (!leftMouseHeld) {
+					leftClickConsumed = false;
+				}
 			}
 			
 			ItemStack main = player.getHeldItemMainhand();
