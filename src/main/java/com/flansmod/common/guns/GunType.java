@@ -561,7 +561,7 @@ public class GunType extends PaintableType implements IScope
 	}
 	
 	/**
-	 * To be overriden by subtypes for model reloading
+	 * To be overridden by subtypes for model reloading
 	 */
 	public void reloadModel()
 	{
