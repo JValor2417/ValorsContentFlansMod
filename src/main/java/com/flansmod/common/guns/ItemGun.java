@@ -377,15 +377,17 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					int burstRounds = data.GetBurstRoundsRemaining(hand);
 					//PlayerData burst rounds handled on client
-					if(burstRounds > 0) {
-						shouldShootThisTick = true;
-						data.SetBurstRoundsRemaining(hand, burstRounds - 1);
-					} else if (hold && !IsClickConsumed(hand)) {
-						shouldShootThisTick = true;
-						//Subtract 1 for the current round being fired.
-						data.SetBurstRoundsRemaining(hand, type.numBurstRounds - 1);
+					if (hold) {
+						//Only continue the burst when holding down fire
+						if(burstRounds > 0) {
+							shouldShootThisTick = true;
+						} else if (!IsClickConsumed(hand)) { //Start new burst only on the first tick with mouse button held
+							shouldShootThisTick = true;
+							data.SetBurstRoundsRemaining(hand, type.numBurstRounds);
+						}
 					} else {
 						needsToReload = false;
+						data.SetBurstRoundsRemaining(hand, 0);
 					}
 
 					break;
@@ -534,6 +536,7 @@ public class ItemGun extends Item implements IPaintableItem
 
 				// Add the delay for this shot and shoot it!
 				shootTime += type.GetShootDelay(gunstack);
+
 				
 				int bulletID = 0;
 				ItemStack bulletStack = ItemStack.EMPTY.copy();
@@ -602,7 +605,12 @@ public class ItemGun extends Item implements IPaintableItem
 						Float recoil = type.getRecoil(gunstack);
 						FlansModClient.playerRecoil += recoil;
 						animations.recoil += recoil;
-						
+
+						int burstRounds = data.GetBurstRoundsRemaining(hand);
+						if (burstRounds > 0) {
+							burstRounds--;
+							data.SetBurstRoundsRemaining(hand, burstRounds);
+						}
 					} else
 					{
 						Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
