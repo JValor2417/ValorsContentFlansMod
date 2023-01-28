@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.Project;
 
 import net.minecraft.block.material.Material;
@@ -668,7 +666,7 @@ public class ClientRenderHooks
 			renderPlayerAmmo(i, j);
 			renderTeamInfo(tessellator, i, j);
 			renderKillMessages(i, j);
-			renderVehicleDebug();
+			renderVehicleInfo();
 		}
 	}
 	
@@ -949,7 +947,7 @@ public class ClientRenderHooks
 		RenderHelper.disableStandardItemLighting();
 	}
 	
-	private void renderVehicleDebug()
+	private void renderVehicleInfo()
 	{
 		// DEBUG vehicles
 		if(mc.player.getRidingEntity() instanceof EntitySeat)
