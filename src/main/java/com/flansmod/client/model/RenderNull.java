@@ -33,23 +33,23 @@ public class RenderNull<E extends Entity> extends Render<E>
 	{
 		if(FlansMod.DEBUG)
 		{
+
 			GlStateManager.pushMatrix();
+
 			GlStateManager.translate((float)d, (float)d1, (float)d2);
 			GlStateManager.rotate(-entity.rotationYaw, 0F, 1F, 0F);
-			GlStateManager.disableTexture2D();
-			//GlStateManager.enableBlend();
-			//GlStateManager.disableDepth();
-			if(entity instanceof EntitySeat)
-			{
-				GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.enableBlend();
+			if(entity instanceof EntitySeat) {
+				GlStateManager.color(0.3F, 1F, 0.3F);
 			}
-			else GlStateManager.color(0F, 0F, 1F, 0.3F);
-			GlStateManager.scale(-1F, 1F, -1F);
-			renderOffsetAABB(new AxisAlignedBB(-1F, -1F, -1F, 1F, 1F, 1F), 0, 0, 0);
-			GlStateManager.enableTexture2D();
-			GlStateManager.enableDepth();
+			else {
+				GlStateManager.color(1F, 1F, 0F, 0.3F);
+			}
+			GlStateManager.scale(1F, 1F, 1F);
+			ModelDriveable.renderOffsetAABB(new AxisAlignedBB(-.5F, 0F, -.5F, .5F, 1F, .5F), 0, 0, 0);
+
 			GlStateManager.disableBlend();
-			GlStateManager.color(1F, 1F, 1F, 1F);
+
 			GlStateManager.popMatrix();
 		}
 	}

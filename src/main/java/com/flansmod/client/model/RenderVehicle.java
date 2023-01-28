@@ -166,18 +166,22 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					
 					if(FlansMod.DEBUG)
 					{
+						GlStateManager.pushMatrix();
+
 						GlStateManager.translate(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
 						GlStateManager.rotate(-vehicle.getSeat(0).looking.getPitch(), 0.0F, 0.0F, 1.0F);
 						GlStateManager.translate(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 						
 						//Render shoot points
+						GlStateManager.enableBlend();
+
 						GlStateManager.color(0F, 0F, 1F, 0.3F);
 						for(ShootPoint point : type.shootPointsPrimary)
 						{
 							DriveablePosition driveablePosition = point.rootPos;
 							if(driveablePosition.part == EnumDriveablePart.turret)
 							{
-								renderOffsetAABB(new AxisAlignedBB(
+								ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 										driveablePosition.position.x - 0.25F,
 										driveablePosition.position.y - 0.25F,
 										driveablePosition.position.z - 0.25F,
@@ -188,12 +192,12 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 							}
 						}
 						
-						GlStateManager.color(0F, 1F, 0F, 0.3F);
+						GlStateManager.color(0.3F, 0.3F, 1F, 0.3F);
 						for(ShootPoint point : type.shootPointsSecondary)
 						{
 							DriveablePosition driveablePosition = point.rootPos;
 							if(driveablePosition.part == EnumDriveablePart.turret)
-								renderOffsetAABB(new AxisAlignedBB(
+								ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 										driveablePosition.position.x - 0.25F,
 										driveablePosition.position.y - 0.25F,
 										driveablePosition.position.z - 0.25F,
@@ -202,6 +206,10 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 										driveablePosition.position.z + 0.25F),
 									0, 0, 0);
 						}
+
+						GlStateManager.disableBlend();
+
+						GlStateManager.popMatrix();
 					}
 				}
 				GlStateManager.popMatrix();
@@ -220,14 +228,15 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				}
 			}
 			GlStateManager.popMatrix();
-			
+
 			if(FlansMod.DEBUG)
 			{
-				GlStateManager.disableTexture2D();
+				GlStateManager.pushMatrix();
+
 				GlStateManager.enableBlend();
-				GlStateManager.disableDepth();
-				GlStateManager.color(1F, 0F, 0F, 0.3F);
 				GlStateManager.scale(1F, 1F, 1F);
+
+				GlStateManager.color(1F, 0F, 0F, 0.3F);
 				for(DriveablePart part : vehicle.getDriveableData().parts.values())
 				{
 					if(part.box == null)
@@ -236,8 +245,8 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
 						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 				}
-				
-				// Render shoot points
+
+				// Render non-turret shoot points
 				GlStateManager.color(0F, 0F, 1F, 0.3F);
 				for(ShootPoint point : type.shootPointsPrimary)
 				{
@@ -245,35 +254,33 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					if(driveablePosition.part != EnumDriveablePart.turret)
 					{
 						ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
-								driveablePosition.position.x - 0.25F,
-								driveablePosition.position.y - 0.25F,
-								driveablePosition.position.z - 0.25F,
-								driveablePosition.position.x + 0.25F,
-								driveablePosition.position.y + 0.25F,
-								driveablePosition.position.z + 0.25F),
-							0, 0, 0);
+										driveablePosition.position.x - 0.25F,
+										driveablePosition.position.y - 0.25F,
+										driveablePosition.position.z - 0.25F,
+										driveablePosition.position.x + 0.25F,
+										driveablePosition.position.y + 0.25F,
+										driveablePosition.position.z + 0.25F),
+								0, 0, 0);
 					}
 				}
-				
-				GlStateManager.color(0F, 1F, 0F, 0.3F);
+
+				GlStateManager.color(0.3F, 0.3F, 1F, 0.3F);
 				for(ShootPoint point : type.shootPointsSecondary)
 				{
 					DriveablePosition driveablePosition = point.rootPos;
 					if(driveablePosition.part != EnumDriveablePart.turret)
 						ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
-								driveablePosition.position.x - 0.25F,
-								driveablePosition.position.y - 0.25F,
-								driveablePosition.position.z - 0.25F,
-								driveablePosition.position.x + 0.25F,
-								driveablePosition.position.y + 0.25F,
-								driveablePosition.position.z + 0.25F),
-							0, 0, 0);
+										driveablePosition.position.x - 0.25F,
+										driveablePosition.position.y - 0.25F,
+										driveablePosition.position.z - 0.25F,
+										driveablePosition.position.x + 0.25F,
+										driveablePosition.position.y + 0.25F,
+										driveablePosition.position.z + 0.25F),
+								0, 0, 0);
 				}
-				
-				GlStateManager.enableTexture2D();
-				GlStateManager.enableDepth();
 				GlStateManager.disableBlend();
-				GlStateManager.color(1F, 1F, 1F, 1F);
+
+				GlStateManager.popMatrix();
 			}
 		}
 		GlStateManager.popMatrix();
