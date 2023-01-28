@@ -961,18 +961,13 @@ public class ClientRenderHooks
 				double dX = ent.posX - ent.prevPosX;
 				double dY = ent.posY - ent.prevPosY;
 				double dZ = ent.posZ - ent.prevPosZ;
+
+				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ); // Blocks per tick
+				speed *= 20; // Converting to blocks per second
+				// Might give an erroneous value if TPS drops because this assumes there are exactly 20 ticks per second
 				
-				// Convert to chunks per Minecraft hour
-				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F;
-				
-				speed = (int)(speed * 10F) / 10F;
-				
-				mc.fontRenderer.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
-				
-				if(FlansMod.DEBUG)
-				{
-					mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
-				}
+				mc.fontRenderer.drawString(String.format("Speed: %.1f blocks per second", speed), 2, 2, 0xffffff);
+				mc.fontRenderer.drawString(String.format("Throttle: %.1f%%", ent.throttle * 100), 2, 12, 0xffffff);
 			}
 		}
 	}
