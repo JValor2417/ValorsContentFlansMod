@@ -122,7 +122,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				if(part.box == null)
 					continue;
 				
-				GlStateManager.color(1F, entityPlane.isPartIntact(part.type) ? 1F : 0F, 0F, 0.3F);
+				GlStateManager.color(entityPlane.isPartIntact(part.type) ? 1F : 0.5F, 0F, 0F, 0.3F);
 				
 				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
 						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
@@ -135,7 +135,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			}
 			
 			// Render shoot points
-			GlStateManager.color(1F, 0F, 1F, 0.3F);
+			GlStateManager.color(0F, 0F, 1F, 0.3F);
 			for(ShootPoint point : type.shootPointsPrimary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;
@@ -149,7 +149,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 					0, 0, 0);
 			}
 			
-			GlStateManager.color(0F, 1F, 0F, 0.3F);
+			GlStateManager.color(0.3F, 0.3F, 1F, 0.3F);
 			for(ShootPoint point : type.shootPointsSecondary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;

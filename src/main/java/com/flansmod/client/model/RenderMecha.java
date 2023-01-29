@@ -206,7 +206,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 				if(part.box == null)
 					continue;
 				
-				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F), 0, 0, 0);
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 			}
 			
 			//Render shoot points
