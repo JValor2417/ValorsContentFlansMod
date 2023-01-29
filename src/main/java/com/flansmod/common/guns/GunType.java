@@ -46,6 +46,11 @@ public class GunType extends PaintableType implements IScope
 	public float bulletSpread;
 	
 	public EnumSpreadPattern spreadPattern = EnumSpreadPattern.cube;
+
+	/**
+	 * Time between selecting a gun and being able to fire it.
+	 */
+	public int switchDelay = 0;
 	
 	/**
 	 * Damage inflicted by this gun. Multiplied by the bullet damage.
@@ -344,6 +349,7 @@ public class GunType extends PaintableType implements IScope
 			dropItemOnShoot = Read(split, "DropItemOnShoot", dropItemOnShoot);
 			numBurstRounds = Read(split, "NumBurstRounds", numBurstRounds);
 			minigunStartSpeed = Read(split, "MinigunStartSpeed", minigunStartSpeed);
+			switchDelay = Read(split, "SwitchDelay", switchDelay);
 			if(split[0].equals("MeleeDamage"))
 			{
 				meleeDamage = Float.parseFloat(split[1]);

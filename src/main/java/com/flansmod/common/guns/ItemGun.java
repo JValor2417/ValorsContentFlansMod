@@ -313,7 +313,7 @@ public class ItemGun extends Item implements IPaintableItem
 		// This code is not for deployables
 		if(type.deployable)
 			return;
-		
+
 		//Scope Handling
 		IScope currentScope = type.getCurrentScope(gunstack);
 		if(!hasOffHand)
@@ -349,7 +349,20 @@ public class ItemGun extends Item implements IPaintableItem
 		data.minigunSpeed *= 0.9f;
 		Boolean hold = GetMouseHeld(hand);
 		Boolean held = GetLastMouseHeld(hand);
-		
+
+		//Switch Delay
+		if (player.inventory.currentItem != data.lastInventorySlot) {
+			ItemStack stackCurrent = player.getHeldItemMainhand();
+			if (stackCurrent != null && stackCurrent.getItem() instanceof ItemGun) {
+				int delay = ((ItemGun) stackCurrent.getItem()).type.switchDelay;
+				if (data.GetShootTime(hand) < delay) {
+					data.SetShootTime(hand, delay);
+					player.getCooldownTracker().setCooldown(stackCurrent.getItem(), delay);
+				}
+			}
+		}
+		data.lastInventorySlot = player.inventory.currentItem;
+
 		// Do not shoot ammo bags, flags or dropped gun items
 		if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
 			hold = false;
@@ -365,7 +378,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if (!gunCanBeHandled(type, player))
 			return;
 		
-		if(type.usableByPlayers)
+		if(type.usableByPlayers && data.GetShootTime(hand) <= 0)
 		{
 			GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
 			
