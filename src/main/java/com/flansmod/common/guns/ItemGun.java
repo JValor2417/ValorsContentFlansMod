@@ -781,6 +781,14 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	public boolean Reload(ItemStack gunstack, World world, Entity entity, IInventory inventory, EnumHand hand, boolean hasOffHand, boolean forceReload, boolean isCreative)
 	{
+		PlayerData data = PlayerHandler.getPlayerData((EntityPlayer) entity);
+		float shootTime = data.GetShootTime(hand);
+		// Prevents reloading multiple weapons and resetting the shootTime via reloading a small gun
+		// Serverside gives 4 ticks to player to account for some latency.
+		if (shootTime > 4 || (!world.isRemote && shootTime > 0)) {
+			return false;
+		}
+
 		//Deployable guns cannot be reloaded in the inventory
 		
 		//TODO investigate if this code can can actually be called by an deployable
