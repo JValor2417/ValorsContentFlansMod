@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.block.material.Material;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Multimap;
@@ -519,6 +520,11 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		if(type.usableByPlayers)
 		{
+			// Exiting early if gun cannot fire underwater and is underwater
+			if (!type.canShootUnderwater && player.isInsideOfMaterial(Material.WATER)) {
+				return;
+			}
+
 			float shootTime = data.GetShootTime(hand);
 			
 			ItemStack otherHand = null;
