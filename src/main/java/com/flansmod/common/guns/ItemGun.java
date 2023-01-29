@@ -521,7 +521,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(type.usableByPlayers)
 		{
 			// Exiting early if gun cannot fire underwater and is underwater
-			if (!type.canShootUnderwater && player.isInsideOfMaterial(Material.WATER)) {
+			if (!type.canShootUnderwater && world.getBlockState(new BlockPos(player.getPositionEyes(0))).getMaterial().isLiquid()) {
 				return;
 			}
 
