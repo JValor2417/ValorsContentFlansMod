@@ -149,6 +149,18 @@ public class GunType extends PaintableType implements IScope
 	 * Show reload time in seconds
 	 */
 	public boolean showReloadTime = false;
+	/**
+	 * Show the rate of fire in rpm
+	 */
+	public boolean showRateOfFire = false;
+	/**
+	 * Show fire mode
+	 */
+	public boolean showFireMode = false;
+	/**
+	 * Show switch delay in seconds
+	 */
+	public boolean showSwitchDelay = false;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -363,6 +375,9 @@ public class GunType extends PaintableType implements IScope
 			showRecoil = Read(split, "ShowRecoil", showRecoil);
 			showSpread = Read(split, "ShowAccuracy", showSpread);
 			showReloadTime = Read(split, "ShowReloadTime", showReloadTime);
+			showRateOfFire = Read(split, "ShowRateOfFire", showRateOfFire);
+			showFireMode = Read(split, "ShowFireMode", showFireMode);
+			showSwitchDelay = Read(split, "ShowSwitchDelay", showSwitchDelay);
 			
 			//Sounds
 			shootDelay = Read(split, "ShootDelay", shootDelay);

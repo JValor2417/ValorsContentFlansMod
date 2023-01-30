@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.block.material.Material;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Multimap;
@@ -1158,13 +1157,20 @@ public class ItemGun extends Item implements IPaintableItem
 			Collections.addAll(lines, type.description.split("_"));
 		}
 		if(type.showDamage)
-			lines.add("\u00a79Damage" + "\u00a77: " + type.getDamage(stack));
+			lines.add(String.format("\u00a79Damage:\u00a77 %.2f", type.getDamage(stack)));
 		if(type.showRecoil)
-			lines.add("\u00a79Recoil" + "\u00a77: " + type.getRecoil(stack));
+			lines.add(String.format("\u00a79Recoil:\u00a77 %.2f", type.getRecoil(stack)));
 		if(type.showSpread)
-			lines.add("\u00a79Accuracy" + "\u00a77: " + type.getSpread(stack));
+			lines.add(String.format("\u00a79Accuracy:\u00a77 %.2f", type.getSpread(stack)));
 		if(type.showReloadTime)
-			lines.add("\u00a79Reload Time" + "\u00a77: " + type.getReloadTime(stack) / 20 + "s");
+			lines.add(String.format("\u00a79Reload Time:\u00a77 %.2fs", type.getReloadTime(stack) / 20));
+		if(type.showRateOfFire)
+			lines.add(String.format("\u00a79Rate of Fire:\u00a77 %drpm", (int)(20 / type.GetShootDelay(stack)) * 60 ));
+		if(type.showSwitchDelay)
+			lines.add(String.format("\u00a79Switch Delay:\u00a77 %.2fs", type.switchDelay / 20.0f));
+		if(type.showFireMode)
+			lines.add("\u00a79Fire Mode:\u00a77 " + type.getFireMode(stack));
+
 		for(AttachmentType attachment : type.getCurrentAttachments(stack))
 		{
 			if(type.showAttachments)
