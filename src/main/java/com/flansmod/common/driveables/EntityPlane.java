@@ -634,6 +634,13 @@ public class EntityPlane extends EntityDriveable
 				Vector3f targetWheelPos = axes.findLocalVectorGlobally(
 						getPlaneType().wheelPositions[wheel.getExpectedWheelID()].position);
 				Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
+
+				//This is to prevent a NaN bug if currentWheelPos is a zero length vector
+				if (currentWheelPos.length() < 0.001f) {
+					FlansMod.log.warn("Invalid wheel pos, attempting to recover.");
+					currentWheelPos = new Vector3f(targetWheelPos);
+					currentWheelPos.normalise().scale(0.01f);
+				}
 				
 				float targetWheelLength = targetWheelPos.length();
 				float currentWheelLength = currentWheelPos.length();
