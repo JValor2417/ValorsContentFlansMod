@@ -637,7 +637,9 @@ public class EntityPlane extends EntityDriveable
 
 				//This is to prevent a NaN bug if currentWheelPos is a zero length vector
 				if (currentWheelPos.length() < 0.001f) {
-					FlansMod.log.warn("Invalid wheel pos, attempting to recover.");
+					if (FlansMod.DEBUG) {
+						FlansMod.log.warn("Invalid wheel pos, attempting to recover.");
+					}
 					currentWheelPos = new Vector3f(targetWheelPos);
 					currentWheelPos.normalise().scale(0.01f);
 				}
@@ -653,7 +655,9 @@ public class EntityPlane extends EntityDriveable
 				
 				float dLength = targetWheelLength - currentWheelLength;
 				float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
-				
+
+				// A couple of the operations below can create NaN bugs if this angle is 0.
+				if (dAngle > 0)
 				{
 					//Now Lerp by wheelSpringStrength and work out the new positions		
 					float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
