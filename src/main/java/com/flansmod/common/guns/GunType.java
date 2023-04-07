@@ -61,7 +61,8 @@ public class GunType extends PaintableType implements IScope
 	 */
 	public float meleeDamage = 1;
 	/**
-	 * The speed of bullets upon leaving this gun. 0.0f means instant.
+	 * The speed of bullets upon leaving this gun.
+	 * Set to negative for hitscan.
 	 */
 	public float bulletSpeed = 0.0f;
 	/**
@@ -495,14 +496,9 @@ public class GunType extends PaintableType implements IScope
 			{
 				if(split[1].toLowerCase().equals("instant"))
 				{
-					bulletSpeed = 0.0f;
+					bulletSpeed = -1f;
 				}
 				else bulletSpeed = Float.parseFloat(split[1]);
-				
-				if(bulletSpeed > 3.0f)
-				{
-					bulletSpeed = 0.0f;
-				}
 			}
 			else if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);

@@ -74,7 +74,7 @@ public class ShotHandler
 	 */
 	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
-		if (shot.getFireableGun().getBulletSpeed() == 0f)
+		if (shot.getFireableGun().getBulletSpeed() < 0f)
 		{
 			//Raytrace
 			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler);
