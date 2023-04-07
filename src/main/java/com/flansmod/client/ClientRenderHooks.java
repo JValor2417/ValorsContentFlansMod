@@ -642,13 +642,12 @@ public class ClientRenderHooks
 		int j = scaledresolution.getScaledHeight();
 		
 		Tessellator tessellator = Tessellator.getInstance();
-		
-		// Remove crosshairs if looking down the sights of a gun
+
 		if(event.getType() == ElementType.CROSSHAIRS
 				&& FlansModClient.currentScope != null)
 		{
 			renderHitMarker(tessellator, i, j);
-			event.setCanceled(true);
+			//event.setCanceled(true);
 			return;
 		}
 		
