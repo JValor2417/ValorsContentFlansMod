@@ -1,0 +1,14 @@
+Name V3 Titan Fuel Cell
+ShortName v3titanfuelcell
+Icon V3TitanFuelCell
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Fuel, Misc
+Category Fuel
+Fuel 200000
+StackSize 1
+RecipeOutput 1
+Recipe I blockIron C blockDiamond
+ I
+CCC
+CCC

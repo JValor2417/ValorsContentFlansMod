@@ -1,0 +1,49 @@
+Name James Post Modern Vehicles Box
+ShortName jamespostmodernvehicles
+TopTexture JamesPostModernVehiclesBoxTop
+SideTexture JamesPostModernVehiclesBoxSide
+BottomTexture boxBottom
+GunBoxID 155
+Recipe I ingotIron G vehiclepolymerplating
+III
+IGI
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//Vehicle 1
+SetPage Vehicle 1
+AddGun au40mm 4 blockIron 40 vehiclepolymerplating
+AddAmmo au40mmAmmo 2 blockIron 40 gunpowder
+AddAmmo au40mmheAmmo 2 blockIron 60 gunpowder
+AddGun gau24mm 4 blockIron 20 vehiclepolymerplating
+AddAmmo gau24mmAmmo 2 blockIron 20 gunpowder
+AddAmmo gau24mmheAmmo 2 blockIron 40 gunpowder
+AddGun gau30mm 6 blockIron 20 vehiclepolymerplating
+AddAmmo gau30mmAmmo 4 blockIron 40 gunpowder
+AddAmmo gau30mmheAmmo 4 blockIron 60 gunpowder
+AddGun rocketpod57mm 2 blockIron 40 vehiclepolymerplating
+AddAmmo rocketpod57mmAmmo 2 blockIron 30 gunpowder
+AddGun rocketpod68mm 4 blockIron 40 vehiclepolymerplating 10 vehiclepolymerplating
+AddAmmo rocketpod68mmAmmo 3 blockIron 50 gunpowder 10 vehiclepolymerplating
+//Vehicle 2
+SetPage Vehicle 2
+AddGun gpwgm 1 blockIron 10 vehiclepolymerplating 20 gunpowder
+AddGun gphewgm 1 blockIron 10 vehiclepolymerplating 30 gunpowder
+AddGun ataagm 1 blockIron 20 redstone 20 gunpowder
+AddGun ataheagm 1 blockIron 20 redstone 30 gunpowder
+//Vehicle 3
+SetPage Vehicle 3
+AddGun atgagm 1 blockIron 20 redstone 20 gunpowder
+AddGun atgheagm 1 blockIron 20 redstone 30 gunpowder
+AddGun gtgagm 1 blockIron 20 redstone 20 gunpowder
+AddGun gtgheagm 1 blockIron 20 redstone 30 gunpowder
+//Vehicle 4
+SetPage Vehicle 4
+AddGun gtaagm 1 blockIron 20 redstone 20 gunpowder
+AddGun gtaheagm 1 blockIron 20 redstone 30 gunpowder
+AddGun gpshell120mm 2 blockIron 10 vehiclepolymerplating 20 gunpowder
+AddGun heshell120mm 2 blockIron 10 vehiclepolymerplating 40 gunpowder
+AddGun hvshell120mm 2 blockIron 20 vehiclepolymerplating 30 gunpowder

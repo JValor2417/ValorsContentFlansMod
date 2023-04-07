@@ -1,0 +1,16 @@
+Name Kinetic Transfer Plating
+Description Transfers force from initial impact back into the surface impacted.
+ShortName mechaKineticTransferPlating
+Icon KineticTransferPlating
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe O obsidian F netherStar
+OOF   
+OOF
+OOF
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type feetUpgrade
+//The modifiers this item enacts on the mecha
+StopMechaFallDamage true
+ForceBlockFallDamage true

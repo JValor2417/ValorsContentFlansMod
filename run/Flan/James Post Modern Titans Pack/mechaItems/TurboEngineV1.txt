@@ -1,0 +1,15 @@
+Name Turbo Engine V1
+Description Increase mecha speed by 20%
+ShortName mechaTurboEngineV1
+Icon Turbo Engine V1
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe A advHydraulics I ingotIron R redstone
+III
+ARA
+III
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type legUpgrade
+//The modifiers this item enacts on the mecha
+SpeedMultiplier 1.2

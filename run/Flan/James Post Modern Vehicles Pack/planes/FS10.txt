@@ -1,0 +1,124 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name FS10
+ShortName fs10
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon FS10
+Model jamespostmodernvehicles.FS10
+Texture FS10
+//Third Person Camera Distance
+CameraDistance 30.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
+HasGear True
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Plane
+//Throttle
+MaxThrottle 4
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 1
+TurnRightSpeed 1
+//Pitch modifiers
+LookUpSpeed 1
+LookDownSpeed 1
+//Roll modifiers
+RollLeftSpeed 2
+RollRightSpeed 2
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 4
+//Wheels
+NumWheels 3
+WheelPosition 0 -22 -10 -18
+WheelPosition 1 -22 -10 18
+WheelPosition 2 64 -10 0
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 54 0 0 core metalPropeller
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Gun
+Secondary Missile
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 1
+ShootDelaySecondary 80
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary 166 24 -1 nose gau30mm
+ShootPointSecondary 45 10 -60 leftWing
+ShootPointSecondary 45 10 60 rightWing
+DamageModifierPrimary 1
+DamageModifierSecondary 1
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 12
+AllowAllAmmo False
+AddAmmo mk2jericho
+AddAmmo mk1phoenix
+AddAmmo atgagm
+AddAmmo atgheagm
+AddAmmo ataagm
+AddAmmo ataheagm
+AddAmmo gpwgm
+AddAmmo gphewgm
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 8000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 140 50 0
+Passengers 0
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound JetIdle
+StartSoundLength 120
+PropSound JetEngine1
+PropSoundLength 40
+ShootSoundPrimary GAU30mmShoot
+ShootSoundSecondary Rocket1Shoot
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 2 advancedMetalCockpit
+AddRecipeParts coreWheel 1 wheel
+AddRecipeParts nose 1 metalNose 1 GAU30mm
+AddRecipeParts rightWing 2 metalWingSmall
+AddRecipeParts leftWing 2 metalWingSmall
+AddRecipeParts tail 1 metalTail
+AddRecipeParts rightWingWheel 1 wheel
+AddRecipeParts leftWingWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 8 black
+AddDye 8 gray
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+SetupPart nose 3000 115 15 -11 40 23 22
+SetupPart core 5000 -54 15 -12 168 45 24
+SetupPart tail 3000 -152 31 -12 97 76 24
+SetupPart rightWing 3000 -41 39 12 67 9 149
+SetupPart leftWing 3000 -41 39 -161 67 9 149
+BulletDetection 10
+
+
+//Collison Points
+CollisionPoint 155 25 0 nose
+CollisionPoint 116 25 0 nose
+CollisionPoint 23 42 -34 leftWing
+CollisionPoint -41 42 -35 leftWing
+CollisionPoint -42 42 -98 leftWing
+CollisionPoint 2 42 -98 leftWing
+CollisionPoint -27 42 -154 leftWing
+CollisionPoint 23 42 34 rightWing
+CollisionPoint -41 42 35 rightWing
+CollisionPoint -42 42 98 rightWing
+CollisionPoint 2 42 98 rightWing
+CollisionPoint -27 42 154 rightWing
+CollisionPoint -153 52 0 tail
+CollisionPoint -55 52 0 tail
+CollisionPoint -108 109 0 tail
+ModelScale 1.30

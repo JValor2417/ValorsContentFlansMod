@@ -1,0 +1,55 @@
+////Name and icon
+Name Electric Smoke Grenade
+ShortName electricsmokegrenade
+Icon ElectricSmokeGrenade
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Item and recipe
+StackSize 4
+////Visuals
+Model jamespostmodernweapons.ElectricSmokeGrenade
+Texture ElectricSmokeGrenade
+TrailParticles true
+TrailParticleType snowballpoof
+ExplodeParticles 0
+//ExplodeParticleType <particleType>
+SmokeTime 100
+//SmokeParticleType <particleType>
+//Syntax is SmokeEffect <ID> <Duration> <Amplifier>
+//IDs are 	1:MoveSpeed		2:MoveSlowdown		3:DigSpeed			4:DigSlowdown		5:DamageBoost	6:Heal			7:Harm		8:Jump			9:Confusion		10:Regeneration
+//			11:Resistance	12:FireResistance	13:WaterBreathing	14:Invisibility		15:Blindness	16:NightVision	17:Hunger	18:Weakness		19:Poison		20:Wither
+SmokeEffect 9 40 0
+SmokeEffect 20 40 0
+SmokeRadius 10
+SpinWhenThrown false
+////Throwing
+ThrowDelay 60
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact false
+Bounciness 0.8
+HitEntityDamage 1
+ThrowSpeed 2.0
+FallSpeed 1.0
+BreaksGlass true
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger -1.0
+Fuse 80
+DetonateWhenShot true
+Remote false
+//DespawnTime 0
+PrimeDelay 0
+////Detonation
+FireRadius 0.0
+ExplosionRadius 6.0
+ExplosionBreaksBlocks false
+//DropItemOnDetonate <itemID.damage>
+DetonateSound ElectricSmokeGrenadeDetonate
+////Misc
+Description GPDU - General Purpose Deployable Utility

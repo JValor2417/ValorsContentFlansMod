@@ -1,0 +1,15 @@
+Description Fog lights that emit a standard light level.
+Name Fog Lights V1
+ShortName mechaFogLightsV1
+Icon FogLightsV1
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe G lightgem B basicCPU
+GGG
+GBG
+GGG
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type headUpgrade
+//The modifiers this item enacts on the mecha
+LightLevel 8

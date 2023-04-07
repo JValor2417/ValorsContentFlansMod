@@ -1,0 +1,14 @@
+Name V2 Titan Fuel Cell
+ShortName v2titanfuelcell
+Icon V2TitanFuelCell
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Fuel, Misc
+Category Fuel
+Fuel 150000
+StackSize 1
+RecipeOutput 1
+Recipe I blockIron C blockDiamond
+ I
+CCC
+CC

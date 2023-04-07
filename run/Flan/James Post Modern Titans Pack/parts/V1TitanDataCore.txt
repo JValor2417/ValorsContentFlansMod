@@ -1,0 +1,16 @@
+Name V1 Titan Data Core
+ShortName v1titandatacore
+Icon V1TitanDataCore
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Engine
+EngineSpeed 1.0
+FuelConsumption 0.4
+WorksWith mechas
+StackSize 1
+RecipeOutput 1
+Recipe R blockRedstone I blockDiamond U blockGold
+IRI
+IUI
+IRI

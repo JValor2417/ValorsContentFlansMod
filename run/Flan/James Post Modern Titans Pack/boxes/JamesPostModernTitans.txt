@@ -1,0 +1,35 @@
+Name James Post Modern Titans Box
+ShortName jamespostmoderntitans
+TopTexture JamesPostModernTitansBoxTop
+SideTexture JamesPostModernTitansBoxSide
+BottomTexture boxBottom
+GunBoxID 155
+Recipe I ingotIron G titanpolymerplating
+III
+IGI
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//Titan 1
+SetPage Titan 1
+AddGun ama40mm 12 blockIron 28 titanpolymerplating
+AddAmmo ama40mmAmmo 3 blockIron 30 gunpowder
+AddGun gau20mm 8 blockIron 50 titanpolymerplating
+AddAmmo gau20mmAmmo 4 blockIron 20 gunpowder
+AddGun stars 6 blockIron 24 titanpolymerplating
+AddAmmo starsAmmo 1 blockIron 18 gunpowder 8 titanpolymerplating
+AddAmmo starsnci3Ammo 1 blockIron 18 gunpowder 2 spiderEye
+AddAmmo starsburningrubberAmmo 1 blockIron 18 gunpowder 2 blazePowder
+//Titan 2
+SetPage Titan 2
+AddGun kcaslugger 14 blockIron 30 titanpolymerplating
+AddAmmo kcasluggerAmmo 4 blockIron 10 redstone
+AddGun splittercannon 8 blockIron 22 titanpolymerplating 4 diamond
+AddAmmo splittercannonAmmo 1 blockIron 22 titanpolymerplating 60 redstone
+AddGun predator37mm 16 blockIron 38 titanpolymerplating
+AddAmmo predator37mmAmmo 5 blockIron 40 gunpowder 16 titanpolymerplating
+AddGun leadwall 12 blockIron 16 titanpolymerplating
+AddAmmo leadwallAmmo 1 blockIron 14 gunpowder 4 titanpolymerplating

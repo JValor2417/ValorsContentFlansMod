@@ -1,0 +1,17 @@
+Name V1 Vehicle Repair Kit
+ShortName v1vehiclerepairkit
+Icon V1VehicleRepairKit
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Heal false
+Repair true
+HealAmount 1000
+ToolLife 10
+DestroyOnEmpty false
+StackSize 1
+RecipeOutput 1
+Recipe I blockIron C blockCoal
+CCC
+  I
+  I
+RechargeRecipe 3 blockCoal

@@ -43,16 +43,9 @@ minecraft {
     replace "@ALLOWED_VERSIONS@", "[5.10.0, 5.11)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
-	replaceIn "ModernWeaponsPackMod.java"
-	replaceIn "TitanPackMod.java"
-	replaceIn "SimplePartsPackMod.java"
-	replaceIn "NerfPackMod.java"
-	replaceIn "MechaPartsPackMod.java"
-	replaceIn "UtilityPackMod.java"
-	replaceIn "WW2PackMod.java"
-	replaceIn "YeOldePackMod.java"	
-	replaceIn "ZombiePackMod.java"	
-	
+	replaceIn "JamesPostModernWeaponsPackMod.java"
+	replaceIn "JamesPostModernTitansPackMod.java"
+	replaceIn "JamesPostModernVehiclesPackMod.java"
     replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.4, 1.5)"
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
@@ -85,66 +78,24 @@ processResources {
 
 version = "${project.minecraft.version}-${project.version}"
 
-task mechaParts(type: Jar) {
-	from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/mechaparts/' }
-    from 'run/Flan/Mecha Parts Pack'
-    baseName = 'Mecha Parts'
+task jamesPostModernWeapons(type: Jar) {
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/jamespostmodernweapons/' }
+    from 'run/Flan/James Post Modern Weapons Pack'
+    baseName = 'James Post Modern Weapons'
     appendix = 'Content Pack'
 }
 
-task modernWeapons(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/modernweapons/' }
-    from 'run/Flan/Modern Weapons Pack'
-    baseName = 'Modern Warfare'
+task jamesPostModernTitans(type: Jar) {
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/jamespostmoderntitans/' }
+    from 'run/Flan/James Post Modern Titans Pack'
+    baseName = 'James Post Modern Titans'
     appendix = 'Content Pack'
 }
 
-task nerf(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/nerf/' }
-    from 'run/Flan/Nerf Pack'
-    baseName = 'Nerf'
-    appendix = 'Content Pack'
-}
-
-task simpleParts(type: Jar) {
-	from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/simple/' }
-    from 'run/Flan/Parts Pack'
-    baseName = 'Simple Parts'
-    appendix = 'Content Pack'
-}
-
-task titan(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/titan/' }
-    from 'run/Flan/Titan Pack'
-    baseName = 'Titan'
-    appendix = 'Content Pack'
-}
-
-task utility(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/utility/' }
-    from 'run/Flan/Utility Pack'
-    baseName = 'Utility'
-    appendix = 'Content Pack'
-}
-
-task ww2(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/ww2/' }
-    from 'run/Flan/WW2 Pack'
-    baseName = 'WW2'
-    appendix = 'Content Pack'
-}
-
-task yeOlde(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/yeolde/' }
-    from 'run/Flan/Ye Olde Pack'
-    baseName = 'Ye Olde'
-    appendix = 'Content Pack'
-}
-
-task zombie(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/zombie/' }
-    from 'run/Flan/Zombie Pack'
-    baseName = 'Zombie'
+task jamesPostModernVehicles(type: Jar) {
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/jamespostmodernvehicles/' }
+    from 'run/Flan/James Post Modern Vehicles Pack'
+    baseName = 'James Post Modern Vehicles'
     appendix = 'Content Pack'
 }
 
@@ -162,15 +113,9 @@ task leaderboards(type: Jar) {
 }
 
 task contentPacks() {
-    dependsOn mechaParts
-    dependsOn modernWeapons
-    dependsOn nerf
-    dependsOn simpleParts
-    dependsOn titan
-    dependsOn utility
-    dependsOn ww2
-    dependsOn yeOlde
-    dependsOn zombie
+    dependsOn jamesPostModernWeapons
+    dependsOn jamesPostModernTitans
+    dependsOn jamesPostModernVehicles
     dependsOn apoc
 	dependsOn leaderboards
 }
@@ -183,16 +128,9 @@ task outputJar(type: Jar) {
     destinationDir = new File("build/output/mods/")
     from(zipTree("build/libs/${archivesBaseName}-${version}-all.jar")) {
         exclude '**/apocalypse/'
-        exclude '**/modernweapons/'
-        exclude '**/nerf/'
-        exclude '**/titan/'
-        exclude '**/utility/'
-        exclude '**/ww2/'
-        exclude '**/yeolde/'
-        exclude '**/zombie/'
-        exclude '**/simple/'
-        exclude '**/mechaparts/'
-		exclude '**/steampunk/'
+        exclude '**/jamespostmodernweapons/'
+        exclude '**/jamespostmoderntitans/'
+        exclude '**/jamespostmodernvehicles/'
 		exclude '**/leaderboards/'
     }
 }

@@ -1,0 +1,279 @@
+Name James Post Modern Weapons Box
+ShortName jamespostmodernweapons
+TopTexture JamesPostModernWeaponsBoxTop
+SideTexture JamesPostModernWeaponsBoxSide
+BottomTexture boxBottom
+GunBoxID 155
+Recipe I ingotIron G fiberglass
+III
+IGI
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//GPHG 1
+SetPage GPHG 1
+AddGun m9 2 ingotIron 4 fiberglass
+AddAmmo m9Ammo 2 ingotIron 2 gunpowder
+AddGun usp 6 ingotIron 4 fiberglass
+AddAmmo uspAmmo 2 ingotIron 4 gunpowder
+AddGun m1911 4 ingotIron 2 fiberglass
+AddAmmo m1911Ammo 2 ingotIron 1 gunpowder
+AddGun sigp226 4 ingotIron 4 fiberglass
+AddAmmo sigp226Ammo 2 ingotIron 4 gunpowder
+AddGun sigp232 4 ingotIron 4 fiberglass
+AddAmmo sigp232Ammo 2 ingotIron 4 gunpowder
+//GPHG 2
+SetPage GPHG 2
+AddGun makarov 4 ingotIron 2 fiberglass
+AddAmmo makarovAmmo 2 fiberglass 6 gunpowder
+AddGun glock 8 ingotIron 2 fiberglass
+AddAmmo glockAmmo 6 fiberglass 8 gunpowder 
+AddGun fn57 8 ingotIron 4 fiberglass
+AddAmmo fn57Ammo 6 fiberglass 10 gunpowder 
+AddGun pmr30 1 ingotIron 4 fiberglass
+AddAmmo pmr30Ammo 2 ingotIron 2 gunpowder
+AddGun laugoalien 2 ingotIron 4 fiberglass
+AddAmmo laugoalienAmmo 1 ingotIron 2 gunpowder
+//MPHG 1
+SetPage MPHG 1
+AddGun jury 6 ingotIron 2 fiberglass
+AddAmmo juryAmmo 1 iron_nugget 1 gunpowder
+AddGun eldiablo 10 ingotIron 18 fiberglass
+AddAmmo eldiabloAmmo 3 iron_nugget 4 gunpowder
+AddGun chiapparhino 2 ingotIron 6 fiberglass
+AddAmmo chiapparhinoAmmo 3 iron_nugget 2 gunpowder
+AddGun kcasmartpistol 16 fiberglass 12 ingotIron 24 redstone
+AddAmmo kcasmartpistolAmmo 8 fiberglass 12 gunpowder 16 redstone
+//HPHG 1
+SetPage HPHG 1
+AddGun desertEagle 14 ingotIron 4 fiberglass
+AddAmmo desertEagleAmmo 6 fiberglass 12 gunpowder
+AddGun largrizzly 4 ingotIron 4 fiberglass
+AddAmmo largrizzlyAmmo 1 ingotIron 4 gunpowder
+//GPLG 1
+SetPage GPLG 1
+AddGun fnscar 6 ingotIron 12 fiberglass
+AddAmmo fnscarAmmo 10 fiberglass 4 gunpowder
+AddGun acr 4 ingotIron 16 fiberglass
+AddAmmo acrAmmo 8 fiberglass 6 gunpowder
+AddGun aug 10 ingotIron 6 fiberglass
+AddAmmo augAmmo 6 fiberglass 6 gunpowder
+AddGun mtar 6 ingotIron 10 fiberglass
+AddAmmo mtarAmmo 6 fiberglass 4 gunpowder
+AddGun adar15 10 ingotIron 18 fiberglass
+AddAmmo adar15Ammo 14 fiberglass 4 gunpowder
+//GPLG 2
+SetPage GPLG 2
+AddGun hcar 10 ingotIron 16 fiberglass
+AddAmmo hcarAmmo 12 fiberglass 2 gunpowder
+AddGun hk416 12 ingotIron 8 fiberglass
+AddAmmo hk416Ammo 10 fiberglass 3 gunpowder
+AddGun galil 12 ingotIron 16 fiberglass
+AddAmmo galilAmmo 12 fiberglass 4 gunpowder
+AddGun famas 12 ingotIron 16 fiberglass
+AddAmmo famasAmmo 16 fiberglass 8 gunpowder
+AddGun an94 12 ingotIron 18 fiberglass
+AddAmmo an94Ammo 10 fiberglass 6 gunpowder
+//GPLG 3
+SetPage GPLG 3
+AddGun ash12 18 ingotIron 12 fiberglass
+AddAmmo ash12Ammo 8 fiberglass 6 gunpowder
+AddGun a91 11 ingotIron 10 fiberglass
+AddAmmo a91Ammo 7 fiberglass 4 gunpowder
+AddGun m16a4 10 ingotIron 14 fiberglass
+AddAmmo m16a4Ammo 4 fiberglass 2 gunpowder
+AddGun ak47 8 ingotIron 12 fiberglass
+AddAmmo ak47Ammo 4 fiberglass 4 gunpowder
+AddGun g36 8 ingotIron 14 fiberglass
+AddAmmo g36Ammo 4 fiberglass 2 gunpowder
+//GPLG 4
+SetPage GPLG 4
+AddGun cmr30 1 ingotIron 6 fiberglass
+AddAmmo cmr30Ammo 2 ingotIron 2 gunpowder
+AddGun pr3 30 ingotIron 8 fiberglass
+AddAmmo pr3Ammo 14 fiberglass 10 redstone 6 leather
+AddAltAmmo pr3oscAmmo 14 fiberglass 16 redstone
+AddGun ar57 4 ingotIron 4 fiberglass
+AddAmmo ar57Ammo 2 ingotIron 4 gunpowder
+AddGun ak74 14 ingotIron 10 fiberglass
+AddAmmo ak74Ammo 4 fiberglass 6 gunpowder
+//MPLG 1
+SetPage MPLG 1
+AddGun m14 12 ingotIron 10 fiberglass
+AddAmmo m14Ammo 4 fiberglass 4 gunpowder
+AddGun g3 14 ingotIron 10 fiberglass
+AddAmmo g3Ammo 4 fiberglass 2 gunpowder
+AddGun sg550 24 ingotIron 18 fiberglass
+AddAmmo sg550Ammo 12 fiberglass 10 gunpowder
+AddGun tripletake 18 ingotIron 24 fiberglass
+AddAmmo tripletakeAmmo 8 ingotGold 16 redstone
+AddGun dragunov 16 ingotIron 12 fiberglass
+AddAmmo dragunovAmmo 4 fiberglass 12 gunpowder
+//MPLG 2
+SetPage MPLG 2
+AddGun kcasmartcarbine 18 ingotIron 24 redstone
+AddAmmo kcasmartcarbineAmmo 14 ingotIron 18 gunpowder 28 redstone
+//SPLG 1
+SetPage SPLG 1
+AddGun m40a3 18 ingotIron 16 fiberglass
+AddAmmo m40a3Ammo 3 iron_nugget 4 gunpowder
+AddGun r700 14 ingotIron 6 fiberglass
+AddAmmo r700Ammo 3 iron_nugget 4 gunpowder
+AddGun m21 20 ingotIron 18 fiberglass
+AddAmmo m21Ammo 8 fiberglass 10 gunpowder
+AddGun barrett 32 ingotIron 18 fiberglass
+AddAmmo barrettAmmo 18 fiberglass 14 gunpowder
+AddGun l96 22 ingotIron 18 fiberglass
+AddAmmo l96Ammo 16 fiberglass 10 gunpowder
+//SPLG 2
+SetPage SPLG 2
+AddGun kcasmart50 42 ingotIron 22 fiberglass 28 redstone
+AddAmmo kcasmart50Ammo 24 fiberglass 26 gunpowder 22 redstone
+AddGun emp4 42 ingotIron 28 fiberglass 64 redstone
+AddAmmo emp4Ammo 22 ingotIron 10 ingotGold 14 redstone
+//HPLG 4
+SetPage HPLG 4
+AddGun ntw20 38 ingotIron 18 fiberglass
+AddAmmo ntw20Ammo 22 fiberglass 14 gunpowder
+AddGun pgmhecate 6 ingotIron 10 fiberglass
+AddAmmo pgmhecateAmmo 8 ingotIron 6 gunpowder
+AddGun ssk950 18 ingotIron 20 fiberglass
+AddAmmo ssk950Ammo 2 ingotIron 4 gunpowder
+//GPSG 1
+SetPage GPSG 1
+AddGun w1200 16 ingotIron 14 fiberglass
+AddGun m1014 14 ingotIron 18 fiberglass
+AddGun r870 12 ingotIron 20 fiberglass
+AddGun spas 14 ingotIron 22 fiberglass
+AddGun peacekeeper 12 ingotIron 16 fiberglass
+//GPSG 2
+SetPage GPSG 2
+AddGun judge 8 ingotIron 10 fiberglass
+AddGun executioner 10 ingotIron 14 fiberglass
+AddGun aa12 18 ingotIron 24 fiberglass
+AddGun srm1216 16 ingotIron 20 fiberglass
+AddGun krissscalar 19 ingotIron 20 fiberglass
+//GPSG 3
+SetPage GPSG 3
+AddGun mastiff1218 16 ingotIron 18 fiberglass
+AddAmmo mastiff1218Ammo 2 ingotGold 6 fiberglass 4 redstone
+//GPSG Ammo 1
+SetPage GPSG Ammo 1
+AddGun r870 12 ingotIron 20 fiberglass
+AddAltAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
+AddAltAmmo 12gflechetteAmmo 3 iron_nugget 1 gunpowder
+AddAltAmmo 12gslugAmmo 3 iron_nugget 1 gunpowder
+AddAltAmmo 12gbirdshotAmmo 3 iron_nugget 1 gunpowder
+AddGun r870 12 ingotIron 20 fiberglass
+AddAltAmmo 12gincendiaryAmmo 1 12gbirdshotAmmo 1 blazepowderfilament
+AddAltAmmo 12gheAmmo 1 12gslugAmmo 4 gunpowder
+AddAltAmmo 12gpoisonedflechetteAmmo 1 12gflechetteAmmo 1 spidereyefilament
+//LPMG 1
+SetPage LPMG 1
+AddGun m249 26 ingotIron 8 fiberglass
+AddAmmo m249Ammo 24 fiberglass 12 gunpowder 6 leather
+AddGun rpd 22 ingotIron 12 fiberglass
+AddAmmo rpdAmmo 24 fiberglass 14 gunpowder 6 leather
+AddGun rpk 20 ingotIron 16 fiberglass
+AddAmmo rpkAmmo 14 fiberglass 10 gunpowder 6 leather
+AddGun m60 22 ingotIron 16 fiberglass
+AddAmmo m60Ammo 24 fiberglass 16 gunpowder 6 leather
+AddGun l86 24 ingotIron 6 fiberglass
+AddAmmo l86Ammo 24 fiberglass 10 gunpowder 6 leather
+//LPMG 2
+SetPage LPMG 2
+AddGun devotionx55 28 ingotIron 12 fiberglass 6 leather
+AddAmmo devotionx55Ammo 12 fiberglass 2 ingotGold 18 redstone
+//HPMG 1
+SetPage HPMG 1
+AddGun gau19 24 ingotIron 20 fiberglass
+AddAmmo gau19Ammo 26 fiberglass 22 gunpowder
+AddGun dushka2038 20 ingotIron 24 fiberglass
+AddAmmo dushka2038Ammo 4 ingotIron 6 gunpowder
+//GPIG 1
+SetPage GPIG 1
+AddGun mp5 14 ingotIron
+AddAmmo mp5Ammo 8 fiberglass 6 gunpowder
+AddGun skorpion 8 ingotIron
+AddAmmo skorpionAmmo 2 fiberglass 4 gunpowder
+AddGun uzi 12 ingotIron
+AddAmmo uziAmmo 2 fiberglass 6 gunpowder
+AddGun bizon 14 ingotIron 8 fiberglass
+AddAmmo bizonAmmo 16 fiberglass 6 gunpowder
+AddGun am180 6 ingotIron 4 fiberglass
+AddAmmo am180Ammo 6 ingotIron 8 gunpowder
+//GPIG 2
+SetPage GPIG 2
+AddGun mp7 14 ingotIron
+AddAmmo mp7Ammo 6 fiberglass 4 gunpowder
+AddGun fmg 5 ingotIron 8 fiberglass
+AddAmmo fmgAmmo 4 fiberglass 3 gunpowder
+AddGun p90 8 ingotIron 14 fiberglass
+AddAmmo p90Ammo 10 fiberglass 8 gunpowder
+AddGun honeybadger 16 ingotIron 12 fiberglass
+AddAmmo honeybadgerAmmo 12 fiberglass 4 gunpowder
+AddGun krissvector 16 ingotIron 4 fiberglass
+AddAmmo krissvectorAmmo 10 fiberglass 6 gunpowder
+//GPIG 3
+SetPage GPIG 3
+AddGun voltv3 17 ingotIron 4 fiberglass
+AddAmmo voltv3Ammo 8 fiberglass 6 redstone 1 ingotGold
+//GPGG 1
+SetPage GPGG 1
+AddGun sidewinder7 24 ingotIron 22 fiberglass
+AddAmmo sidewinder7Ammo 12 ingotIron 26 gunpowder 6 fiberglass
+AddGun gl1 16 ingotIron 24 fiberglass
+AddGun gl6 28 ingotIron 28 fiberglass
+AddGun coldware2 28 ingotIron 30 fiberglass 20 redstone
+AddAmmo coldware2Ammo 22 ingotIron 2 ingotGold 8 redstone
+AddGun paw20 28 ingotIron 28 fiberglass
+AddAmmo paw20Ammo 14 ingotIron 16 gunpowder 6 fiberglass
+//GPGG 2
+SetPage GPGG 2
+AddGun qlz87b 26 ingotIron 28 fiberglass
+AddAmmo qlz87bAmmo 16 ingotIron 18 gunpowder 8 fiberglass
+//GPGG Ammo 1
+SetPage GPGG Ammo 1
+AddGun gl1 16 ingotIron 24 fiberglass
+AddAmmo 40mmgrenadelauncherimpactAmmo 14 ingotIron 14 gunpowder
+AddAltAmmo 40mmgrenadelauncherbouncyAmmo 12 ingotIron 12 gunpowder 2 fiberglass
+AddAltAmmo 40mmgrenadelaunchergasAmmo 10 ingotIron 8 gunpowder 1 spiderEye
+AddAltAmmo 40mmgrenadelauncherincendiaryAmmo 10 ingotIron 8 gunpowder 1 blazepowderfilament
+AddAltAmmo 40mmgrenadelauncherbeehiveAmmo 9 ingotIron 11 gunpowder
+//HPGG 1
+SetPage HPGG 1
+AddGun rpg 14 ingotIron 18 fiberglass
+AddAmmo rpgAmmo 8 ingotIron 18 gunpowder
+AddGun m72law 18 ingotIron 8 fiberglass
+AddAmmo m72lawAmmo 4 ingotIron 18 gunpowder
+AddGun at4 18 fiberglass 14 ingotIron 20 redstone
+AddAmmo at4Ammo 4 ingotIron 18 gunpowder 32 redstone
+AddGun stinger 22 ingotIron 10 fiberglass 20 redstone
+AddAmmo stingerAmmo 12 ingotIron 18 gunpowder 32 redstone
+AddGun panzerfaust3 16 ingotIron 20 fiberglass
+AddAmmo panzerfaust3Ammo 2 ingotIron 18 gunpowder
+//HPGG 2
+SetPage HPGG 2
+AddGun mlrs6 26 ingotIron 22 fiberglass
+AddAmmo mlrs6Ammo 8 ingotIron 22 gunpowder
+//SPG 1
+SetPage SPG 1
+AddGun b4crossbow 8 ingotIron 34 fiberglass
+AddAmmo b4crossbowAmmo 1 ingotIron 4 fiberglass
+AddGun flamethrower 30 ingotIron 4 fiberglass 4 redstone
+AddAmmo flamethrowerAmmo 6 ingotIron 4 fiberglass 6 coal
+//GPDU 1
+SetPage GPDU 1
+AddGun electricsmokegrenade 12 fiberglass 16 gunpowder 4 ingotIron
+AddGun fragmentationgrenade 12 fiberglass 16 gunpowder 12 redstone
+AddGun proximitymine 16 fiberglass 22 gunpowder 4 redstone
+AddGun hesatchel 10 fiberglass 32 gunpowder 16 redstone
+AddGun alarmtrap 30 fiberglass 30 gunpowder 40 redstone
+//GPDU 2
+SetPage GPDU 2
+AddGun decoycanister 30 fiberglass 30 gunpowder 20 ingotIron
+AddGun mwAmmoBag 8 leather 32 gunpowder 16 ingotIron
+AddGun mwMedicBag 8 leather 32 redstone 16 fiberglass

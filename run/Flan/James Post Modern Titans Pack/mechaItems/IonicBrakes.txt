@@ -1,0 +1,15 @@
+Name IonicBrakes
+Description Semi passive method for more precise titan control, suited for resource gathering in hazardous conditions.
+ShortName mechaIonicBrakes
+Icon IonicBrakes
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe A advHydraulics I ingotIron
+IAI
+   
+IAI
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type legUpgrade
+//The modifiers this item enacts on the mecha
+SpeedMultiplier 0.6

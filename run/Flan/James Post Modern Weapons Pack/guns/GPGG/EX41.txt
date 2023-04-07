@@ -1,0 +1,59 @@
+Name EX41
+ShortName ex41
+//The ammo this gun uses (shortName)
+Ammo grenadelauncherimpactAmmo
+Ammo grenadelauncherbouncyAmmo
+Ammo grenadelaunchergasAmmo
+Ammo grenadelauncherincendiaryAmmo
+Ammo 40mmgrenadelauncherbeehiveAmmo
+Icon EX41
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 45
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 14
+//Damage in half hearts
+Damage 1
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 9.0
+ShootSound ex41Shoot
+ReloadSound ex41Reload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.5
+UsableByMechas false
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model jamespostmodernweapons.EX41
+Texture EX41
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWHCOG flanMW2xScope flanMW4xScope flanMW8xScope flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight flanMWForegrip flanMWUnderBarrelLaser flanMWFlashlight
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 0
+//Modifiers
+MoveSpeedModifier 0.8
+KnockbackModifier 0
+Description GPGG - General Purpose Grenadier Gun :
+
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+SwitchDelay 80

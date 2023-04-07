@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "flansmod:blocks/JamesPostModernTitansBoxSide",
+    "down": "flansmod:blocks/boxBottom",
+    "up": "flansmod:blocks/JamesPostModernTitansBoxTop",
+    "north": "flansmod:blocks/JamesPostModernTitansBoxSide",
+    "east": "flansmod:blocks/JamesPostModernTitansBoxSide",
+    "south": "flansmod:blocks/JamesPostModernTitansBoxSide",
+    "west": "flansmod:blocks/JamesPostModernTitansBoxSide"
+  }
+}
