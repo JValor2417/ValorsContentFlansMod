@@ -81,7 +81,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		motionY = direction.y;
 		motionZ = direction.z;
 		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
-		
+
+		checkCollision();
+
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
 	}
 
@@ -300,31 +302,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			
 			if(!world.isRemote)
 			{
-				Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
-				Integer ping = 0;
-				if (shot.getPlayerOptional().isPresent())
-					ping = shot.getPlayerOptional().get().ping;
-				
-				List<BulletHit> hits = FlansModRaytracer.Raytrace(world, ignore, ticksInAir > 20, this, origin, motion, ping, 0f);
-				
-				// We hit something
-				if(!hits.isEmpty())
-				{
-					for(BulletHit bulletHit : hits)
-					{
-						Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime,
-								origin.y + motion.y * bulletHit.intersectTime,
-								origin.z + motion.z * bulletHit.intersectTime);
-
-						currentPenetratingPower = ShotHandler.OnHit(world, hitPos, motion, shot, bulletHit, currentPenetratingPower);
-						if (currentPenetratingPower <= 0f)
-						{
-							ShotHandler.onDetonate(world, shot, hitPos);
-							setDead();
-							break;
-						}
-					}
-				}
+				checkCollision();
 			}
 			//TODO Client homing fix
 			// Apply homing action
@@ -358,7 +336,40 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			super.setDead();
 		}
 	}
-	
+
+	private void checkCollision()
+	{
+		Vector3f origin = new Vector3f(posX, posY, posZ);
+		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
+
+		Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
+		Integer ping = 0;
+		if (shot.getPlayerOptional().isPresent())
+			ping = shot.getPlayerOptional().get().ping;
+
+		List<BulletHit> hits = FlansModRaytracer.Raytrace(world, ignore, ticksInAir > 20, this, origin, motion, ping, 0f);
+
+		// We hit something
+		if(!hits.isEmpty())
+		{
+			for(BulletHit bulletHit : hits)
+			{
+				Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime,
+						origin.y + motion.y * bulletHit.intersectTime,
+						origin.z + motion.z * bulletHit.intersectTime);
+
+				currentPenetratingPower = ShotHandler.OnHit(world, hitPos, motion, shot, bulletHit, currentPenetratingPower);
+				if (currentPenetratingPower <= 0f)
+				{
+					ShotHandler.onDetonate(world, shot, hitPos);
+					setDead();
+					break;
+				}
+			}
+		}
+	}
+
+
 	@SideOnly(Side.CLIENT)
 	private void onUpdateClient()
 	{
