@@ -1,0 +1,65 @@
+//Naming
+Name Expedition Titan MK1
+ShortName expeditiontitanmk1
+//Visuals
+Icon ExpeditionTitanMK1
+Model jamespostmoderntitans.ExpeditionTitanMK1
+Texture ExpeditionTitanMK1
+//Third Person Camera Distance
+CameraDistance 64.0
+//Driver and passenger positions
+Driver 10 40 0
+Passengers 0
+//Offset of driver from the point of rotation
+RotatedDriverOffset 0 0 0
+//Speed Modifier, 1 is player speed
+MoveSpeed 0.6
+//YOffset
+YOffset 0
+//Fuel Tank Size
+FuelTankSize 14000
+FuelConsumption 1
+//Inventory Slots
+CargoSlots 128
+DriverAimSpeed 10 10 0
+//Will it squash puny mobs?
+SquashMobs true
+//Step Height (Integer) and Jump Height (Float)
+StepHeight 1
+JumpHeight 4
+//Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
+LeftArmOrigin 30 30 -10
+RightArmOrigin 30 30 10
+//Arm lengths used to determine where the held items appear (Again in model co-ords)
+ArmLength 10
+LegLength 40
+//The scale multiplier for rendering the items and tools being held (1 will automatically scale with model)
+HeldItemScale 1.2
+//Recipe
+//Each section of the mecha may have many parts
+//The sections are core, leftArm, rightArm, hips, head
+AddRecipeParts core 1 mediumDiamondBody
+AddRecipeParts leftArm 2 mediumDiamondArm
+AddRecipeParts rightArm 2 mediumDiamondArm
+AddRecipeParts hips 1 mediumDiamondLeg
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 white
+//Health and collision
+SetupPart core 100 -16 30 -13 40 40 26
+SetupPart rightArm 100 26 26 -17 29 14 10
+SetupPart hips 100 -13 1 -23 38 60 9
+SetupPart core 100 -22 80 -32 54 32 63
+SetupPart leftArm 100 26 26 6 29 14 10
+SetupPart hips 100 -13 1 14 38 60 9
+BulletDetection 10
+//Height and Width for world collision
+Height 60
+Width 20
+//Height of chassis above the ground
+ChassisHeight 60
+FallDamageMultiplier 0.0
+TakeFallDamage false
+BlockDamageFromFalling 2.0
+DamageBlocksFromFalling false
+//Size Multiplier; scales up the model
+ModelScale 1.0

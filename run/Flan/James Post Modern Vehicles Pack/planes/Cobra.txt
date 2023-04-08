@@ -1,0 +1,102 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name Cobra
+ShortName cobra
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon Cobra
+Model jamespostmodernvehicles.Cobra
+Texture Cobra
+//Third Person Camera Distance
+CameraDistance 15.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 0.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Heli
+//Throttle
+MaxThrottle 1.8
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 2.7
+TurnRightSpeed 2.7
+//Pitch modifiers
+LookUpSpeed 1.2
+LookDownSpeed 1.2
+//Roll modifiers
+RollLeftSpeed 0.2
+RollRightSpeed 0.2
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 7.0
+//Wheels (Fake wheels imitating skids)
+NumWheels 4
+WheelPosition 0 -32 -28 -24
+WheelPosition 1 -32 -28 24
+WheelPosition 2 48 -28 24
+WheelPosition 3 48 -28 -24
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+HeliPropeller 0 0 48 0 blades metalPropeller
+HasLandingGear false
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Gun
+Secondary Missile
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 4
+ShootDelaySecondary 20
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary 12 -4 -29 rightWing rocketpod57mm
+ShootPointPrimary 12 -4 29 leftWing rocketpod57mm
+ShootPointSecondary 12 -4 -29 rightWing
+ShootPointSecondary 12 -4 29 leftWing
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 16
+AllowAllAmmo False
+AddAmmo atgagm
+AddAmmo atgheagm
+AddAmmo ataagm
+AddAmmo ataheagm
+AddAmmo gpwgm
+AddAmmo gphewgm
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 5000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 32 -4 0
+Passengers 1
+Passenger 1 52 -8 0 core -30 30 -30 0 gau24mm Nose
+GunOrigin 1 64 -28 0
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound HelicopterStart
+StartSoundLength 40
+PropSound Helicopter1
+PropSoundLength 40
+ShootSoundPrimary Rocket1Shoot
+//ShootSoundSecondary Rocket1Shoot
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 advancedMetalCockpit 1 gau24mm
+AddRecipeParts skids 2 helicopterSkid
+AddRecipeParts blades 2 helicopterBlade
+AddRecipeParts rightWing 1 metalWingSmall 1 rocketpod57mm
+AddRecipeParts leftWing 1 metalWingSmall 1 rocketpod57mm
+AddRecipeParts tail 1 metalTail 1 metalPropeller
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 6 green
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+SetupPart core 2500 -24 -12 -10 96 32 20
+SetupPart blades 1000 -24 20 -20 48 16 40
+SetupPart rightWing 2000 -12 1 -38 24 2 28
+SetupPart leftWing 2000 -12 1 10 24 2 28
+SetupPart tail 2000 -100 -12 -9 76 24 18
+BulletDetection 10

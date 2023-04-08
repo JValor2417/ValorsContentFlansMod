@@ -1,0 +1,17 @@
+Name V2 Titan Repair Kit
+ShortName v2titanrepairkit
+Icon V2TitanRepairKit
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Heal false
+Repair true
+HealAmount 6000
+ToolLife 10
+DestroyOnEmpty false
+StackSize 1
+RecipeOutput 1
+Recipe I blockDiamond C blockCoal
+CCC
+ II
+ II
+RechargeRecipe 3 blockCoal

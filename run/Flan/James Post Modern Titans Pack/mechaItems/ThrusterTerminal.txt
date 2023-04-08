@@ -1,0 +1,16 @@
+Description Deck of 4 plasmatic thrusters. 
+Name Thruster Terminal
+ShortName mechaThrusterTerminal
+Icon ThrusterTerminal
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe C canister B blockIron A advHydraulics
+ABA
+ABA
+ACA
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type hipsUpgrade
+//The modifiers this item enacts on the mecha
+RocketPack true
+RocketPower 1.2

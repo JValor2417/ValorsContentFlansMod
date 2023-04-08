@@ -1,0 +1,59 @@
+////Name and icon
+Name STARS Ammo
+ShortName starsAmmo
+Icon StarsAmmo
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Item and recipe
+StackSize 6
+////Visuals
+Model jamespostmoderntitans.STARSGrenadeFired
+Texture STARSGrenadeFired
+TrailParticles true
+//TrailParticleType <particleType>
+ExplodeParticles 0
+//ExplodeParticleType <particleType>
+SmokeTime 400
+//SmokeParticleType <particleType>
+//Syntax is SmokeEffect <ID> <Duration> <Amplifier>
+//IDs are 	1:MoveSpeed		2:MoveSlowdown		3:DigSpeed			4:DigSlowdown		5:DamageBoost	6:Heal			7:Harm		8:Jump			9:Confusion		10:Regeneration
+//			11:Resistance	12:FireResistance	13:WaterBreathing	14:Invisibility		15:Blindness	16:NightVision	17:Hunger	18:Weakness		19:Poison		20:Wither
+SmokeEffect 15 300 0
+SmokeEffect 20 300 0
+SmokeRadius 16
+SpinWhenThrown false
+////Throwing
+CanThrow False
+ThrowDelay 10
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact true
+Bounciness 0.8
+HitEntityDamage 1
+ThrowSpeed 3.0
+FallSpeed 1.2
+BreaksGlass true
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger -1.0
+Fuse 20
+DetonateWhenShot true
+Remote false
+//DespawnTime 0
+PrimeDelay 0
+////Detonation
+Fire 6
+//The damage multiplier caused by the bullet on hitting an entity
+DamageVsLiving 140
+DamageVsVehicles 80
+ExplosionRadius 4.0
+ExplosionBreaksBlocks false
+//DropItemOnDetonate <itemID.damage>
+//Detonate Sound <sound>
+////Misc
+Description TITAN UTILITY : Explosive PayLoad, Suited for Area denial.

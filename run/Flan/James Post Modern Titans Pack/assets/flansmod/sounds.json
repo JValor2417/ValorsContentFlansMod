@@ -1,0 +1,86 @@
+{
+  "GAU20mmShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:GAU20mmShoot"
+    ]
+  },
+  "GAU20mmReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:GAU20mmReload"
+    ]
+  },
+  "AMA40mmShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:AMA40mmShoot"
+    ]
+  },
+  "AMA40mmReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:AMA40mmReload"
+    ]
+  },
+  "STARSShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:STARSShoot"
+    ]
+  },
+  "STARSReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:STARSReload"
+    ]
+  },
+  "KCASluggerShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:KCASluggerShoot"
+    ]
+  },
+  "KCASluggerReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:KCASluggerReload"
+    ]
+  },
+  "SplitterCannonShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:SplitterCannonShoot"
+    ]
+  },
+  "SplitterCannonReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:SplitterCannonReload"
+    ]
+  },
+  "Predator37mmShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:Predator37mmShoot"
+    ]
+  },
+  "Predator37mmReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:Predator37mmReload"
+    ]
+  },
+  "LeadWallShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:LeadWallShoot"
+    ]
+  },
+  "LeadWallReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:LeadWallReload"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+Name Kriss Scalar
+ShortName krissscalar
+//The ammo this gun uses (shortName)
+Ammo 12gslugAmmo
+Ammo 12gbirdshotAmmo
+Ammo 12gbuckshotAmmo
+Ammo 12gflechetteAmmo
+Ammo 12gheAmmo
+Ammo 12gincendiaryAmmo
+Ammo 12gpoisonedflechetteAmmo
+Icon KrissScalar
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 65
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 3
+//Damage in half hearts
+Damage 1.7
+//For guns in which the magazine is integrated
+LoadIntoGun 12
+//The higher this value, the more the bullets spread
+Accuracy 18
+//Time in ticks between rounds
+ShootDelay 4.2
+ShootSound KrissScalarShoot
+ReloadSound KrissScalarReload
+Mode FullAuto
+OneHanded true
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+UsableByMechas false
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model jamespostmodernweapons.KrissScalar
+Texture KrissScalar
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSingleFire flanMWBurstFire flanMWAutoFire flanMWPistolFlashlight flanMWUnderBarrelLaser flanMWSilencer flanMWLongBarrel flanMWForegrip flanMWmuzzlebreak flanMWRedDot flanMWACOG flanMWHCOG flanMW4xScope flanMW2xScope flanMW8xScope
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description GPSG - General Purpose Shot Gun :
+
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+SwitchDelay 50

@@ -1,0 +1,17 @@
+Name V1 Titan Repair Kit
+ShortName v1titanrepairkit
+Icon V1TitanRepairKit
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Heal false
+Repair true
+HealAmount 4000
+ToolLife 10
+DestroyOnEmpty false
+StackSize 1
+RecipeOutput 1
+Recipe I blockDiamond C blockCoal
+CCC
+  I
+  I
+RechargeRecipe 3 blockCoal

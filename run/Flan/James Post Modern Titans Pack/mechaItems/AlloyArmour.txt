@@ -1,0 +1,16 @@
+Description Reduces the damage_taken by your mecha
+Name Alloy Armour
+ShortName mechaAlloyArmour
+Icon AlloyArmour
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe C chestplateGold L leggingsIron B bootsGold O obsidian 
+OCO
+OLO
+OBO
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type shoulderUpgrade
+//The modifiers this item enacts on the mecha
+//'Armour' value indicates the proportion of damage the armour will negate
+Armour 1.0

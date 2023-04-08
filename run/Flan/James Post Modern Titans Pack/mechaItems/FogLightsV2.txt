@@ -1,0 +1,15 @@
+Description Fog lights that emit a high light level.
+Name Fog Lights V2
+ShortName mechaFogLightsV2
+Icon FogLightsV2
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe G lightgem B basicCPU
+GBG
+GBG
+GBG
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type headUpgrade
+//The modifiers this item enacts on the mecha
+LightLevel 12
