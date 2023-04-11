@@ -3,6 +3,7 @@ package com.flansmod.common.guns;
 import java.util.List;
 import java.util.UUID;
 
+import com.flansmod.common.network.PacketUpdateVelocity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
@@ -41,7 +42,12 @@ import io.netty.buffer.ByteBuf;
 public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static final DataParameter<String> BULLET_TYPE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.STRING);
-	
+
+	// How many ticks between sending a velocity update packet
+	private static final int VELOCITY_UPDATE_PERIOD = 5;
+	// Homing projectiles change their motion often and need to send the data a bit more frequently
+	private static final int HOMING_UPDATE_PERIOD = 3;
+
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
 	public int ticksInAir;
 	
@@ -275,6 +281,15 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			{
 				onUpdateClient();
 				return;
+			} else {
+				// Send velocity data to client
+				if (this.lockedOnTo != null) {
+					if (this.ticksInAir % HOMING_UPDATE_PERIOD == 0) {
+						updateClientVelocity();
+					}
+				} else if (this.ticksInAir % VELOCITY_UPDATE_PERIOD == 0) {
+					updateClientVelocity();
+				}
 			}
 			
 			
@@ -367,6 +382,18 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				}
 			}
 		}
+	}
+
+	/**
+	 * Sends a packet to the client to update the velocity of the client's mirror of this projectile.
+	 */
+	//@SideOnly(Side.SERVER)
+	private void updateClientVelocity() {
+		if (world.isRemote) {
+			FlansMod.log.info("wtf");
+		}
+		// 100 is the entity tracking range of EntityBullet as defined in FlansMod.java
+		FlansMod.getPacketHandler().sendToAllAround(new PacketUpdateVelocity(this), posX, posY, posZ, 100, dimension);
 	}
 
 

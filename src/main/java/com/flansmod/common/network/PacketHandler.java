@@ -221,6 +221,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketBulletTrail.class);
 		registerPacket(PacketHitMarker.class);
 		registerPacket(PacketBlockHitEffect.class);
+		registerPacket(PacketUpdateVelocity.class);
 	}
 	
 	/**
