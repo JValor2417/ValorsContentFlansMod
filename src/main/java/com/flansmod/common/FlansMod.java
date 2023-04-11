@@ -472,11 +472,11 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), EntityFlag.class, "Flag", 94, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), EntityBullet.class, "Bullet", 96, this, 100, 50, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), EntityBullet.class, "Bullet", 96, this, 100, 3, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:TeamsItem"), EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:GunItem"), EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Seat"), EntitySeat.class, "Seat", 99, this, 250, 3, true);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Grenade"), EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Grenade"), EntityGrenade.class, "Grenade", 100, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), EntityParachute.class, "Parachute", 101, this, 40, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), EntityMecha.class, "Mecha", 102, this, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), EntityWheel.class, "Wheel", 103, this, 250, 20, false);

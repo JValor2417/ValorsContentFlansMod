@@ -304,7 +304,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			{
 				checkCollision();
 			}
-			//TODO Client homing fix
+
 			// Apply homing action
 			if(lockedOnTo != null)
 			{
