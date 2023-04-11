@@ -88,8 +88,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		motionZ = direction.z;
 		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
 
-		checkCollision();
-
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
 	}
 
@@ -354,8 +352,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	private void checkCollision()
 	{
-		Vector3f origin = new Vector3f(posX, posY, posZ);
-		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
+		// The collision check will check the space between the previous position and the current position
+		Vector3f origin = new Vector3f(prevPosX, prevPosY, prevPosZ);
+		Vector3f motion = new Vector3f(posX - prevPosX, posY - prevPosY, posZ - prevPosZ);
 
 		Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
 		Integer ping = 0;
