@@ -595,7 +595,7 @@ public class FlansModClient extends FlansMod
 				if(entity instanceof EntityBullet)
 				{
 					EntityBullet bullet = (EntityBullet)entity;
-					if(!bullet.isDead && bullet.getFiredShot().getBulletType().hasLight)
+					if(!bullet.isDead && bullet.getBulletType().hasLight)
 					{
 						int x = MathHelper.floor(bullet.posX);
 						int y = MathHelper.floor(bullet.posY);

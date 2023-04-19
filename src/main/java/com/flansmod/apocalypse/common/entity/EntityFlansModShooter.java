@@ -384,9 +384,9 @@ public class EntityFlansModShooter extends AbstractSkeleton
 			//Grenades are currently disabled for this entity
 			if (bullet instanceof BulletType)
 			{
-				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
+				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, direction.toVec3(), this);
 			
-				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
+				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin);
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)

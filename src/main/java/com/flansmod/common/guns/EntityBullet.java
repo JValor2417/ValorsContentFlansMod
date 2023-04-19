@@ -75,18 +75,15 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		setSize(0.5F, 0.5F);
 	}
 	
-	public EntityBullet(World world, FiredShot shot, Vec3d origin, Vec3d direction)
+	public EntityBullet(World world, FiredShot shot, Vec3d origin)
 	{
 		this(world);
 		ticksInAir = 0;
 		this.shot = shot;
 		this.dataManager.set(BULLET_TYPE, shot.getBulletType().shortName);
-		
+
 		setPosition(origin.x, origin.y, origin.z);
-		motionX = direction.x;
-		motionY = direction.y;
-		motionZ = direction.z;
-		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
+		setArrowHeading(shot);
 
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
 	}
@@ -97,25 +94,22 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		this.dataManager.register(BULLET_TYPE, null);
 	}
 	
-	public void setArrowHeading(double d, double d1, double d2, float spread, float speed)
+	public void setArrowHeading(FiredShot shot)
 	{
+		float spread = shot.getFireableGun().getGunSpread();
+		Vec3d velocity = shot.getVelocity();
+		double speed = velocity.length();
+
 		spread /= 5F;
-		float f2 = MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-		d /= f2;
-		d1 /= f2;
-		d2 /= f2;
-		d *= speed;
-		d1 *= speed;
-		d2 *= speed;
-		d += rand.nextGaussian() * 0.005D * spread * speed;
-		d1 += rand.nextGaussian() * 0.005D * spread * speed;
-		d2 += rand.nextGaussian() * 0.005D * spread * speed;
-		motionX = d;
-		motionY = d1;
-		motionZ = d2;
-		float f3 = MathHelper.sqrt(d * d + d2 * d2);
-		prevRotationYaw = rotationYaw = (float)((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
-		prevRotationPitch = rotationPitch = (float)((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
+		motionX = velocity.x;
+		motionY = velocity.y;
+		motionZ = velocity.z;
+		motionX += rand.nextGaussian() * 0.005D * spread * speed;
+		motionY += rand.nextGaussian() * 0.005D * spread * speed;
+		motionZ += rand.nextGaussian() * 0.005D * spread * speed;
+		float f3 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+		prevRotationYaw = rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
+		prevRotationPitch = rotationPitch = (float)((Math.atan2(motionY, f3) * 180D) / 3.1415927410125732D);
 		
 		getLockOnTarget();
 	}
@@ -187,46 +181,47 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				
 				if (playeruuid != null)
 				{
-				for (Entity entity : world.loadedEntityList)
-				{
-					if (entity.getUniqueID().equals(playeruuid) && entity instanceof EntityPlayerMP)
-					{
-						player = (EntityPlayerMP)entity;
-						break;
-					}
-				}
-				playeruuid = null;
-			}
-			
-			if (shooteruuid != null)
-			{
-				if (player != null && shooteruuid.equals(player.getUniqueID()))
-				{
-					shooter = player;
-				}
-				else
-				{
 					for (Entity entity : world.loadedEntityList)
 					{
-						if (entity.getUniqueID().equals(shooteruuid))
+						if (entity.getUniqueID().equals(playeruuid) && entity instanceof EntityPlayerMP)
 						{
-							shooter = entity;
+							player = (EntityPlayerMP)entity;
 							break;
 						}
 					}
+					playeruuid = null;
 				}
-				shooteruuid = null;
+			
+				if (shooteruuid != null)
+				{
+					if (player != null && shooteruuid.equals(player.getUniqueID()))
+					{
+						shooter = player;
+					}
+					else
+					{
+						for (Entity entity : world.loadedEntityList)
+						{
+							if (entity.getUniqueID().equals(shooteruuid))
+							{
+								shooter = entity;
+								break;
+							}
+						}
+					}
+					shooteruuid = null;
+				}
+
+				if (shooter != null)
+				{
+					// Velocity here mostly doesn't matter
+					shot = new FiredShot(shot.getFireableGun(), getBulletType(), shot.getVelocity().normalize(), shooter, player);
+				}
+
+				checkforuuids = false;
 			}
 			
-			if (shooter != null)
-			{
-				shot = new FiredShot(shot.getFireableGun(), shot.getBulletType(), shooter, player);
-			}
-			
-			checkforuuids = false;
-			}
-			
-			BulletType type = this.getFiredShot().getBulletType();
+			BulletType type = this.getBulletType();
 			
 			// Movement dampening variables
 			float drag = 0.99F;
@@ -400,7 +395,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private void onUpdateClient()
 	{
 		// Particles
-		if(shot.getBulletType().trailParticles)
+		if(getBulletType().trailParticles)
 		{
 			spawnParticles();
 		}
@@ -424,7 +419,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		float spread = 0.1F;
 		for(int i = 0; i < 10; i++)
 		{
-			Particle particle = FlansModClient.getParticle(shot.getBulletType().trailParticleType, world,
+			Particle particle = FlansModClient.getParticle(getBulletType().trailParticleType, world,
 					prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread,
 					prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			// TODO: [1.12] once again, render distance
@@ -446,7 +441,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
-		tag.setString("type", shot.getBulletType().shortName);
+		tag.setString("type", getBulletType().shortName);
 		FireableGun gun = shot.getFireableGun();
 		//this data will only be present and saved on the server side
 		if (gun != null)
@@ -456,7 +451,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			fireablegun.setFloat("spread", gun.getGunSpread());
 			fireablegun.setFloat("speed", gun.getBulletSpeed());
 			fireablegun.setFloat("damage", gun.getDamage());
-			fireablegun.setFloat("vehicledamage", gun.getDamageAgainstVehicles());
 			tag.setTag("fireablegun",fireablegun);
 		
 			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) -> 
@@ -471,6 +465,12 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				NBTTagCompound compound = NBTUtil.createUUIDTag(shooter.getUniqueID());
 				tag.setTag("shooter", compound);
 			});
+
+			NBTTagCompound velocity = new NBTTagCompound();
+			velocity.setDouble("x", shot.getVelocity().x);
+			velocity.setDouble("y", shot.getVelocity().y);
+			velocity.setDouble("z", shot.getVelocity().z);
+			tag.setTag("initialvelocity", velocity);
 			
 		}
 	}
@@ -486,7 +486,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (tag.hasKey("fireablegun"))
 		{
 			NBTTagCompound gun = tag.getCompoundTag("fireablegun");
-			fireablegun = new FireableGun(InfoType.getType(gun.getInteger("infotype")), gun.getFloat("damage"), gun.getFloat("vehicledamage"), gun.getFloat("spread"), gun.getFloat("speed"), EnumSpreadPattern.circle);
+			fireablegun = new FireableGun(InfoType.getType(gun.getInteger("infotype")), gun.getFloat("damage"), gun.getFloat("spread"), gun.getFloat("speed"), EnumSpreadPattern.circle);
 		}
 		
 		if (tag.hasKey("player"))
@@ -500,8 +500,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			shooteruuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("shooter"));
 			checkforuuids = true;
 		}
-		
-		shot = new FiredShot(fireablegun, type);
+
+		Vec3d velocity = Vec3d.ZERO;
+		if (tag.hasKey("initialvelocity")) {
+			NBTTagCompound velocityNBT = tag.getCompoundTag("initialvelocity");
+			velocity = new Vec3d(velocityNBT.getDouble("x"), velocityNBT.getDouble("y"), velocityNBT.getDouble("z"));
+		}
+		shot = new FiredShot(fireablegun, type, velocity);
 	}
 	
 	@Override
@@ -540,14 +545,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	{
 		return false;
 	}
-	
-	public FiredShot getFiredShot()
-	{
+
+	public BulletType getBulletType() {
 		if (shot == null)
 		{
-			//we dont have this object, therefore we are on the client side and need to construct it
-			shot = new FiredShot(null, BulletType.getBullet(this.dataManager.get(BULLET_TYPE)));
+			return BulletType.getBullet(this.dataManager.get(BULLET_TYPE));
 		}
-		return shot;
+		return shot.getBulletType();
 	}
+
 }

@@ -39,6 +39,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -55,11 +56,10 @@ public class ShotHandler
 	 * @param shot              FiredShot object, created using the guidelines
 	 * @param bulletAmount      Number how many bullets should be fired
 	 * @param rayTraceOrigin    Origin of the bullet
-	 * @param shootingDirection Direction where the bullet will travel
 	 */	
-	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin)
 	{
-		fireGun(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, ShootBulletHandler.instance);
+		fireGun(world, shot, bulletAmount, rayTraceOrigin, ShootBulletHandler.instance);
 	}
 	
 	/**
@@ -68,56 +68,57 @@ public class ShotHandler
 	 * @param world             World where the shot is fired
 	 * @param shot              FiredShot object, created using the guidelines
 	 * @param bulletAmount      Number how many bullets should be fired
-	 * @param rayTraceOrigin    Origin of the bullet
-	 * @param shootingDirection Direction where the bullet will travel
+	 * @param origin		    Origin of the bullet
 	 * @param handler           ShootBulletHandler which is called every time a shot is fired (bulletAmount times)
 	 */
-	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f origin, ShootBulletHandler handler)
 	{
 		if (shot.getFireableGun().getBulletSpeed() < 0f)
 		{
 			//Raytrace
-			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler);
+			createMultipleShots(world, shot, bulletAmount, origin, handler);
 		}
 		else
 		{
 			//Spawn EntityBullet
 			for(int i = 0; i < bulletAmount; i++)
 			{
-				world.spawnEntity(new EntityBullet(world, shot, rayTraceOrigin.toVec3(), shootingDirection.toVec3()));
+				world.spawnEntity(new EntityBullet(world, shot, origin.toVec3()));
 				handler.shooting(i < bulletAmount - 1);
 			}
 		}
 	}
-	
-	private static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+
+	private static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f origin, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, rayTraceOrigin, new Vector3f(shootingDirection));
+			createShot(world, shot, bulletspread, origin);
 			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
-	private static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	private static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f origin)
 	{
-		randomizeVectorDirection(world, shootingDirection, bulletspread, shot.getFireableGun().getSpreadPattern());
-		shootingDirection.scale(500.0f);
+		Vec3d velocity = shot.getVelocity().normalize(); // Length of velocity doesn't matter for raycast projectiles
+		Vector3f direction = new Vector3f(velocity.x, velocity.y, velocity.z);
+		randomizeVectorDirection(world, direction, bulletspread, shot.getFireableGun().getSpreadPattern());
+		direction.scale(500.0f);
 		
 		Float penetrationPower = shot.getBulletType().penetratingPower;
 		//first tries to get the player because the players vehicle is also ignored, or get the player independent shooter or null
 		Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
 		
-		List<BulletHit> hits = Raytrace(world, ignore, false, null, rayTraceOrigin, shootingDirection, 0, penetrationPower);
-		Vector3f previousHitPos = rayTraceOrigin;
+		List<BulletHit> hits = Raytrace(world, ignore, false, null, origin, direction, 0, penetrationPower);
+		Vector3f previousHitPos = origin;
 		Vector3f finalhit = null;
 		
 		for (int i = 0;i<hits.size();i++)
 		{
 			BulletHit hit = hits.get(i);
-			Vector3f shotVector = (Vector3f) new Vector3f(shootingDirection).scale(hit.intersectTime);
-			Vector3f hitPos = Vector3f.add(rayTraceOrigin, shotVector, null);
+			Vector3f shotVector = (Vector3f) new Vector3f(direction).scale(hit.intersectTime);
+			Vector3f hitPos = Vector3f.add(origin, shotVector, null);
 			
 			if(FlansMod.DEBUG)
 			{
@@ -133,7 +134,7 @@ public class ShotHandler
 			}
 			previousHitPos = hitPos;
 			
-			penetrationPower = OnHit(world, hitPos, shootingDirection, shot, hit, penetrationPower);
+			penetrationPower = OnHit(world, hitPos, direction, shot, hit, penetrationPower);
 			if (penetrationPower <= 0f) {
 				onDetonate(world, shot, hitPos);
 				finalhit = hitPos;
@@ -143,11 +144,11 @@ public class ShotHandler
 		
 		if (finalhit == null)
 		{
-			finalhit = Vector3f.add(rayTraceOrigin, shootingDirection, null);
+			finalhit = Vector3f.add(origin, direction, null);
 		}
 		//Animation
 		//TODO should this be send to all Players?
-		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(rayTraceOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), rayTraceOrigin.x, rayTraceOrigin.y, rayTraceOrigin.z, 500f, world.provider.getDimension());
+		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(origin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), origin.x, origin.y, origin.z, 500f, world.provider.getDimension());
 	}
 	
 	/**
@@ -161,13 +162,11 @@ public class ShotHandler
 	 */
 	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, BulletHit bulletHit, Float penetratingPower)
 	{
-		Float damage = shot.getFireableGun().getDamage();
-		
 		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)
 		{
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
-			penetratingPower = driveableHit.driveable.bulletHit(bulletType, shot.getFireableGun().getDamageAgainstVehicles(), driveableHit, penetratingPower);
+			penetratingPower = driveableHit.driveable.bulletHit(bulletType, shot.getDriveableDamage(), driveableHit, penetratingPower);
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
@@ -180,7 +179,7 @@ public class ShotHandler
 		else if(bulletHit instanceof PlayerBulletHit)
 		{
 			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
-			penetratingPower = playerHit.hitbox.hitByBullet(shot, damage, penetratingPower);
+			penetratingPower = playerHit.hitbox.hitByBullet(shot, penetratingPower);
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 			Optional<EntityPlayerMP> optionalPlayer = shot.getPlayerOptional();
@@ -210,7 +209,7 @@ public class ShotHandler
 			EntityHit entityHit = (EntityHit)bulletHit;
 			if(entityHit.entity != null)
 			{
-				if(entityHit.entity.attackEntityFrom(shot.getDamageSource(), damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
+				if(entityHit.entity.attackEntityFrom(shot.getDamageSource(), shot.getDamage()) && entityHit.entity instanceof EntityLivingBase)
 				{
 					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
 					for(PotionEffect effect : bulletType.hitEffects)

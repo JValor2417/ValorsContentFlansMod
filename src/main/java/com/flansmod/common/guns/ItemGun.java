@@ -648,9 +648,9 @@ public class ItemGun extends Item implements IPaintableItem
 								EnchantmentModule.ModifyGun(fireableGun, player, otherHand);
 							}
 							
-							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, (EntityPlayerMP)player);
+							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, rayTraceDirection.toVec3(), (EntityPlayerMP)player);
 							//TODO gunOrigin? & animation origin
-							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);
+							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, handler);
 						}
 						else if (shootableType instanceof GrenadeType)
 						{

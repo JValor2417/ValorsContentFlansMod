@@ -49,6 +49,10 @@ public class BulletType extends ShootableType
 	 * Lock on force that pulls the bullet towards its prey
 	 */
 	public float lockOnForce = 1F;
+	/**
+	 * Multiplier on the speed of the gun
+	 */
+	public float bulletSpeedMultiplier = 1F;
 	
 	public String trailTexture = "defaultBulletTrail";
 	
@@ -123,6 +127,8 @@ public class BulletType extends ShootableType
 				lockOnForce = Float.parseFloat(split[1]);
 			else if(split[0].equals("PotionEffect"))
 				hitEffects.add(getPotionEffect(split));
+			else if(split[0].equals("BulletSpeedMultiplier"))
+				bulletSpeedMultiplier = Float.parseFloat(split[1]);
 		}
 		catch(Exception e)
 		{

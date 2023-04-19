@@ -68,7 +68,7 @@ public abstract class DriveableType extends PaintableType
 	/** Firing modes for primary and secondary guns. Minigun also an option */
 	public EnumFireMode modePrimary = EnumFireMode.FULLAUTO, modeSecondary = EnumFireMode.FULLAUTO;
 	/** Damage modifiers, so that different vehicles firing the same weapons can do different damage */
-	public int damageModifierPrimary = 1, damageModifierSecondary = 1;
+	public float damagePrimary = 1, damageSecondary = 1;
 	
 	/** Positions of primary and secondary weapons */
 	public ArrayList<ShootPoint> shootPointsPrimary = new ArrayList<>();
@@ -344,8 +344,8 @@ public abstract class DriveableType extends PaintableType
 		parsers.put("Secondary", (split, d) -> d.secondary = EnumWeaponType.valueOf(split[1].toUpperCase()));
 		parsers.put("ShootDelayPrimary", (split, d) -> d.shootDelayPrimary = Integer.parseInt(split[1]));
 		parsers.put("ShootDelaySecondary", (split, d) -> d.shootDelaySecondary = Integer.parseInt(split[1]));
-		parsers.put("DamageModifierPrimary", (split, d) -> d.damageModifierPrimary = Integer.parseInt(split[1]));
-		parsers.put("DamageModifierSecondary", (split, d) -> d.damageModifierSecondary = Integer.parseInt(split[1]));
+		parsers.put("DamagePrimary", (split, d) -> d.damagePrimary = Float.parseFloat(split[1]));
+		parsers.put("DamageSecondary", (split, d) -> d.damageSecondary = Integer.parseInt(split[1]));
 		parsers.put("AlternatePrimary", (split, d) -> d.alternatePrimary = Boolean.parseBoolean(split[1]));
 		parsers.put("AlternateSecondary", (split, d) -> d.alternateSecondary = Boolean.parseBoolean(split[1]));
 		parsers.put("ModePrimary", (split, d) -> d.modePrimary = EnumFireMode.valueOf(split[1].toUpperCase()));

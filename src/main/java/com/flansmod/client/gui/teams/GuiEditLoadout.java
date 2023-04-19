@@ -286,7 +286,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 				
 				if(mainAmmo != null)
 				{
-					drawCenteredString(fontRenderer, String.format("%.0f", type.damage * mainAmmo.damageVsLiving * mainAmmo.numBullets), guiOriginX + 290, guiOriginY + 60, 0xffffff);
+					drawCenteredString(fontRenderer, String.format("%.0f", type.damage * mainAmmo.damageMultiplier * mainAmmo.numBullets), guiOriginX + 290, guiOriginY + 60, 0xffffff);
 					drawCenteredString(fontRenderer, String.format("%.0f", (50.0f - type.bulletSpread) * 2.0f), guiOriginX + 290, guiOriginY + 70, 0xffffff);
 					drawCenteredString(fontRenderer, String.format("%d", mainAmmo.roundsPerItem * numClips), guiOriginX + 290, guiOriginY + 80, 0xffffff);
 				}

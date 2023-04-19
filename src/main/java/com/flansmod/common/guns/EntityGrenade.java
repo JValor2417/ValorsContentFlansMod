@@ -450,7 +450,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
 		//(Don't attack entities when stuck to stuff)
-		if(type.damageVsLiving > 0 && !stuck)
+		if(type.meleeDamage > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
 			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox());
@@ -459,7 +459,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
 					continue;
 				if(obj instanceof EntityLivingBase)
-					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.damageVsLiving * motVec.lengthSquared() * 3);
+					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.meleeDamage * motVec.lengthSquared() * 3);
 			}
 		}
 		

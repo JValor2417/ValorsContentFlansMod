@@ -14,7 +14,8 @@ public class GrenadeType extends ShootableType
 	
 	//Misc
 	/**
-	 * The damage imparted by smacking someone over the head with this grenade
+	 * The damage imparted by smacking someone over the head with this grenade.
+	 * Or when the grenade hits someone in flight.
 	 */
 	public int meleeDamage = 1;
 	

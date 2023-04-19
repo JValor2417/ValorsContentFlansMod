@@ -403,9 +403,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
 						
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage, EnumSpreadPattern.circle);
-						FiredShot shot = new FiredShot(weapon, bullet, this, player);
+						FiredShot shot = new FiredShot(weapon, bullet, shootingDirection.toVec3(), this, player);
 						//TODO use Vec3d
-						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
+						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin));
 						
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}

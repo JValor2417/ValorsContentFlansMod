@@ -4,16 +4,24 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import com.flansmod.common.vector.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Class for creating object containing all necessary informations about a fired shot
  */
 public class FiredShot {
 
+	/**
+	 * Initial velocity of the projectile.
+	 * If projectile is an entity, the current velocity is stored by the entity, not here.
+	 * Using Vec3d instead of Flan's Mod's Vector3f because Vec3d is actually immutable.
+	 */
+	private Vec3d velocity;
 	/**
 	 * The weapon used to fire the shot
 	 */
@@ -32,25 +40,32 @@ public class FiredShot {
 	private Optional<? extends Entity> shooter;
 	
 	/**
-	 * @param weapon weapon used to fire the shot
-	 * @param bullet BulletType of the fired bullet
+	 * @param weapon 	Weapon used to fire the shot.
+	 * @param bullet 	BulletType of the fired bullet.
+	 * @param direction Direction bullet is being fired in. Should be a unit vector
 	 */
-	public FiredShot(FireableGun weapon, BulletType bullet)
+	public FiredShot(FireableGun weapon, BulletType bullet, Vec3d direction)
 	{
 		this.weapon = weapon;
 		this.bullet = bullet;
 		this.player = Optional.empty();
 		this.shooter = this.player;
+		// Nulls will mostly happen for worlds that load up bullets that don't exist anymore
+		if (weapon != null && bullet != null) {
+			float speed = this.getFireableGun().getBulletSpeed() * bullet.bulletSpeedMultiplier;
+			this.velocity = direction.normalize().scale(speed);
+		}
 	}
 	
 	/**
-	 * @param weapon weapon used to fire the shot
-	 * @param bullet BulletType of the fired bullet
-	 * @param player The player who shot
+	 * @param weapon 		weapon used to fire the shot
+	 * @param bullet 		BulletType of the fired bullet
+	 * @param direction 	Direction the shot was fired in
+	 * @param player 		The player who shot
 	 */
-	public FiredShot(FireableGun weapon, BulletType bullet, EntityPlayerMP player)
+	public FiredShot(FireableGun weapon, BulletType bullet, Vec3d direction, EntityPlayerMP player)
 	{
-		this(weapon,bullet, player, player);
+		this(weapon, bullet, direction, player, player);
 	}
 	
 	/**
@@ -61,9 +76,9 @@ public class FiredShot {
 	 * @param bullet BulletType of the fired bullet
 	 * @param shooter Entity which fired the shot
 	 */
-	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter)
+	public FiredShot(FireableGun weapon, BulletType bullet, Vec3d direction, Entity shooter)
 	{
-		this(weapon, bullet, shooter, null);
+		this(weapon, bullet, direction, shooter, null);
 	}
 	
 	/**
@@ -75,14 +90,54 @@ public class FiredShot {
 	 * @param shooter the Entity firing the shot
 	 * @param player  the Player causing the shot
 	 */
-	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter, @Nullable EntityPlayerMP player)
+	public FiredShot(FireableGun weapon, BulletType bullet, Vec3d direction, Entity shooter, @Nullable EntityPlayerMP player)
 	{
-		this.weapon = weapon;
-		this.bullet = bullet;
+		this(weapon, bullet, direction);
 		this.player = Optional.ofNullable(player);
 		this.shooter = Optional.of(shooter);
 	}
-	
+
+	/**
+	 * @return Initial velocity of the projectile.
+	 */
+	public Vec3d getVelocity() { return this.velocity; }
+
+	/**
+	 * Adds some velocity to the initial velocity. Used for adding the motion of a vehicle.
+	 * Only works prior to the shot being fired. Useless afterwards.
+	 * @param x Additional velocity in the x-axis
+	 * @param y Additional velocity in the y-axis
+	 * @param z Additional velocity in the z-axis
+	 */
+	public void addVelocity(double x, double y, double z) {
+		this.velocity = this.velocity.add(x, y, z);
+	}
+
+	/**
+	 * Adds some velocity to the initial velocity. Used for adding the motion of a vehicle.
+	 * Only works prior to the shot being fired. Useless afterwards.
+	 * @param additionalVelocity This vector will be added to the current velocity vector.
+	 */
+	public void addVelocity(Vec3d additionalVelocity) {
+		this.velocity = this.velocity.add(additionalVelocity);
+	}
+
+	/**
+	 * Gets the general damage of the shot.
+	 * @return The damage of the shot.
+	 */
+	public float getDamage() {
+		return this.getFireableGun().getDamage() * this.bullet.damageMultiplier;
+	}
+
+	/**
+	 * Gets the damage of the shot to driveables.
+	 * @return The damage of the shot to driveables.
+	 */
+	public float getDriveableDamage() {
+		return this.getDamage() * this.bullet.driveableDamageMultiplier;
+	}
+
 	/**
 	 * @return The gun used for this shot
 	 */

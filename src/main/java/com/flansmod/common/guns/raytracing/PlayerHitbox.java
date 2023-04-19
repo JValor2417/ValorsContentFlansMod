@@ -152,7 +152,7 @@ public class PlayerHitbox
 		return null;
 	}
 
-	public float hitByBullet(FiredShot shot, Float damage, Float penetratingPower)
+	public float hitByBullet(FiredShot shot, Float penetratingPower)
 	{
 		BulletType bulletType = shot.getBulletType();
 		if(bulletType.setEntitiesOnFire)
@@ -181,7 +181,7 @@ public class PlayerHitbox
 			case BODY: case HEAD: case LEFTARM: case RIGHTARM:
 		{
 			//Calculate the hit damage
-			float hitDamage = damage * shot.getBulletType().damageVsLiving * damageModifier;
+			float hitDamage = shot.getDamage() * damageModifier;
 			//Create a damage source object
 			DamageSource damagesource = shot.getDamageSource(type.equals(EnumHitboxType.HEAD));
 			

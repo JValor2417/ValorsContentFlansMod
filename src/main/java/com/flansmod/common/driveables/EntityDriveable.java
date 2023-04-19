@@ -653,13 +653,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				ShootableType ammoType = ((ItemShootable) ammoItem).type;
 				BulletType bulletType = (BulletType) ammoType;
-				FireableGun fireableGun = new FireableGun(
-						gunType,
-						gunType.damage,
-						gunType.bulletSpread,
-						gunType.bulletSpeed,
-						gunType.spreadPattern);
-				FiredShot shot = new FiredShot(fireableGun, bulletType, this, (EntityPlayerMP)getDriver());
+				FireableGun fireableGun = new FireableGun(gunType);
+				FiredShot shot = new FiredShot(fireableGun, bulletType, lookVector.toVec3(), this, (EntityPlayerMP)getDriver());
+				shot.addVelocity(motionX, motionY, motionZ);
 				
 				ShootBulletHandler handler = isExtraBullet ->
 				{
@@ -672,12 +668,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				};
 				
 				Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX, posY, posZ), null);
-				
+
 				ShotHandler.fireGun(world,
 						shot,
 						gunType.numBullets * bulletType.numBullets,
 						gunVector,
-						lookVector,
 						handler);
 				
 				if(type.shootSound(secondary) != null)
@@ -706,7 +701,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(
 					((ItemBullet)shell.getItem()).type, weaponType))
 				{
-					shootProjectile(i, gunVec, lookVector, type, secondary, (float)getSpeed() + 3f);
+					shootProjectile(i, gunVec, lookVector, type, secondary);
 					break;
 				}
 			}
@@ -725,7 +720,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(
 					((ItemBullet)bomb.getItem()).type, weaponType))
 				{
-					shootProjectile(i, gunVec, lookVector, type, secondary, (float)getSpeed());
+					shootProjectile(i, gunVec, lookVector, type, secondary);
 					break;
 				}
 			}
@@ -762,19 +757,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	private void shootProjectile(final Integer slot, Vector3f gunVec, Vector3f lookVector, DriveableType type,
-								 Boolean secondary, float speed)
+								 Boolean secondary)
 	{
 		ItemStack bullet = driveableData.getStackInSlot(slot);
 		ItemBullet bulletItem = (ItemBullet)bullet.getItem();
-		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-		
-		FireableGun fireableGun = new FireableGun(bulletItem.type,
-			bulletItem.type.damageVsLiving * damageMultiplier,
-			bulletItem.type.damageVsDriveable * damageMultiplier,
-			bulletItem.type.bulletSpread,
-			speed,
-			EnumSpreadPattern.circle);
-		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, this, (EntityPlayerMP)getDriver());
+
+		FireableGun fireableGun = new FireableGun(type, secondary);
+		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, lookVector.toVec3(), this, (EntityPlayerMP)getDriver());
+		shot.addVelocity(motionX, motionY, motionZ); // Add motion of driveable
 		
 		ShootBulletHandler handler = isExtraBullet ->
 		{
@@ -795,7 +785,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX, posY, posZ), null);
 		
-		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, lookVector, handler);
+		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, handler);
 		
 		if(type.shootSound(secondary) != null)
 		{

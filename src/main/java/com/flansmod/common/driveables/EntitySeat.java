@@ -717,8 +717,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 								
 								FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed, gun.spreadPattern);
 								//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
-								FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, this, (EntityPlayerMP)getControllingPassenger());
-								ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec);
+								FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, shootVec.toVec3(), this, (EntityPlayerMP)getControllingPassenger());
+								ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null));
 								// Play the shoot sound
 								if(soundDelay <= 0)
 								{

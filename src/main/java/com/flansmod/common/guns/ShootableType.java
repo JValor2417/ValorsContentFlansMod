@@ -66,9 +66,13 @@ public abstract class ShootableType extends InfoType
 	
 	//Damage to hit entities
 	/**
-	 * Amount of damage to impart upon various entities
+	 * This multiplier is applied damage for all types of entities
 	 */
-	public float damageVsLiving = 1, damageVsDriveable = 1;
+	public float damageMultiplier = 1;
+	/**
+	 * This multiplier is applied only for driveables. Applied after damageMultiplier.
+	 */
+	public float driveableDamageMultiplier = 1;
 	/**
 	 * Whether this grenade will break glass when thrown against it
 	 */
@@ -161,14 +165,11 @@ public abstract class ShootableType extends InfoType
 				hitBoxSize = Float.parseFloat(split[1]);
 				
 				//Hit stuff
-			else if(split[0].equals("HitEntityDamage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
-				damageVsLiving = Float.parseFloat(split[1]);
-			else if(split[0].equals("DamageVsVehicles"))
-				damageVsDriveable = Float.parseFloat(split[1]);
-			else if(split[0].equals("Damage"))
-			{
-				damageVsLiving = damageVsDriveable = Float.parseFloat(split[1]);
-			}
+			else if(split[0].equals("DamageMultiplier"))
+				damageMultiplier = Float.parseFloat(split[1]);
+			else if(split[0].equals("DamageVsVehicles") || split[0].equals("DriveableDamageMultiplier"))
+				driveableDamageMultiplier = Float.parseFloat(split[1]);
+
 			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
 				

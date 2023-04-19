@@ -221,15 +221,16 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		shootDelay = type.shootDelay;
 		ItemShootable shootableItem = (ItemShootable)ammo.getItem();
 		ShootableType shootableType = shootableItem.type;
-		
-		Vector3f position = new Vector3f(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D);
-		FireableGun gun = new FireableGun(type, type.damage, type.bulletSpread, type.bulletSpeed, type.spreadPattern);
-		FiredShot shot = new FiredShot(gun, bullet, this, (EntityPlayerMP) gunner);
+
 
 		Double radianYaw = Math.toRadians(direction * 90F + rotationYaw);
 		Double radianPitch = Math.toRadians(rotationPitch);
 		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), -Math.sin(radianPitch), Math.cos(radianYaw));
-		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler);
+		Vector3f position = new Vector3f(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D);
+
+		FireableGun gun = new FireableGun(type, type.damage, type.bulletSpread, type.bulletSpeed, type.spreadPattern);
+		FiredShot shot = new FiredShot(gun, bullet, shootingDirection.toVec3(), this, (EntityPlayerMP) gunner);
+		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, handler);
 		
 		if(soundDelay <= 0)
 		{
