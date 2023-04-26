@@ -1,8 +1,25 @@
 package com.flansmod.common.driveables;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.flansmod.api.IControllable;
+import com.flansmod.api.IExplodeable;
+import com.flansmod.client.EntityCamera;
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugVector;
+import com.flansmod.client.handlers.KeyInputHandler;
+import com.flansmod.common.FlansConfig;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
+import com.flansmod.common.driveables.mechas.ContainerMechaInventory;
+import com.flansmod.common.guns.*;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
+import com.flansmod.common.network.PacketDriveableDamage;
+import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketDriveableKeyHeld;
+import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.vector.Vector3f;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,19 +29,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -34,39 +46,8 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.flansmod.api.IControllable;
-import com.flansmod.api.IExplodeable;
-import com.flansmod.client.EntityCamera;
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.client.handlers.KeyInputHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
-import com.flansmod.common.driveables.mechas.ContainerMechaInventory;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EnumFireMode;
-import com.flansmod.common.guns.EnumSpreadPattern;
-import com.flansmod.common.guns.FireableGun;
-import com.flansmod.common.guns.FiredShot;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.InventoryHelper;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemShootable;
-import com.flansmod.common.guns.ShootBulletHandler;
-import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.guns.ShotHandler;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
-import com.flansmod.common.network.PacketDriveableDamage;
-import com.flansmod.common.network.PacketDriveableKey;
-import com.flansmod.common.network.PacketDriveableKeyHeld;
-import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.parts.EnumPartCategory;
-import com.flansmod.common.parts.ItemPart;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.vector.Vector3f;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
@@ -904,7 +885,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		// Harvest stuff
 		// Aesthetics
-		if(hasEnoughFuel())
+		if(canProducePower())
 		{
 			harvesterAngle += throttle / 5F;
 		}
@@ -1105,12 +1086,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();
 		prevAxes = axes.clone();
-		
-		boolean canThrust = driverIsCreative() || driveableData.fuelInTank > 0;
-		
+
 		// If there's no player in the driveable or it cannot thrust, slow the plane and turn off mouse held actions
 		if((getDriver() == null) ||
-			!canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
+			!canProducePower() && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
 		{
 			throttle *= 0.98F;
 			primaryShootHeld = secondaryShootHeld = false;
@@ -1151,68 +1130,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					shoot(true);
 			}
 		}
-		
-		// Handle fuel
-		
-		int fuelMultiplier = 2;
-		
-		// The tank is currently full, so do nothing
-		if(getDriveableData().fuelInTank >= type.fuelTankSize)
-			return;
-		
-		// Look through the entire inventory for fuel cans, buildcraft fuel buckets and RedstoneFlux power sources
-		for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
+
+		int fuelSlot = driveableData.getFuelSlot();
+		ItemStack stack = driveableData.getStackInSlot(fuelSlot);
+
+		if(stack != null && !stack.isEmpty())
 		{
-			ItemStack stack = getDriveableData().getStackInSlot(i);
-			if(stack == null || stack.isEmpty())
-				continue;
-			Item item = stack.getItem();
-			// Check for Flan's Mod fuel items
-			if(item instanceof ItemPart)
-			{
-				PartType part = ((ItemPart)item).type;
-				// Check it is a fuel item
-				if(part.category == EnumPartCategory.FUEL)
-				{
-					// Put 2 points of fuel
-					getDriveableData().fuelInTank += fuelMultiplier;
-					
-					// Damage the fuel item to indicate being used up
-					int damage = stack.getItemDamage();
-					stack.setItemDamage(damage + 1);
-					
-					// If we have finished this fuel item
-					if(damage >= stack.getMaxDamage())
-					{
-						// Reset the damage to 0
-						stack.setItemDamage(0);
-						// Consume one item
-						stack.setCount(stack.getCount() - 1);
-						// If we consumed the last one, destroy the stack
-						if(stack.getCount() <= 0)
-							getDriveableData().setInventorySlotContents(i, ItemStack.EMPTY.copy());
-					}
-					
-					// We found a fuel item and consumed some, so we are done
-					break;
-				}
-				
-				// Check for Buildcraft oil and fuel buckets
-				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
-					FlansMod.hooks.BuildCraftOilBucket) &&
-					getDriveableData().fuelInTank + 1000 * fuelMultiplier <= type.fuelTankSize)
-				{
-					getDriveableData().fuelInTank += 1000 * fuelMultiplier;
-					getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
-				}
-				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
-					FlansMod.hooks.BuildCraftFuelBucket) &&
-					getDriveableData().fuelInTank + 2000 * fuelMultiplier <= type.fuelTankSize)
-				{
-					getDriveableData().fuelInTank += 2000 * fuelMultiplier;
-					getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
-				}
-			}
+			driveableData.setInventorySlotContents(fuelSlot, driveableData.fuelTank.handleFuelItem(stack));
 		}
 	}
 	
@@ -1520,21 +1444,56 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		driveableData.writeToNBT(tags);
 		return stack;
 	}
-	
-	
-	public boolean hasFuel()
-	{
-		if(getDriver() == null)
-			return false;
-		return driverIsCreative() || driveableData.fuelInTank > 0;
+
+
+	/**
+	 * Gets the current fuel consumption rate of the driveable.
+	 * This is simply the standard fuel consumption rate ({@link #getStandardFuelConsumption()}) * throttle.
+	 * Use this method for getting the fuel consumption rate for any action that involves the throttle.
+	 * @return	how many millibuckets per tick this driveable would consume.
+	 */
+	public float getCurrentFuelConsumption() {
+		return getStandardFuelConsumption() * throttle;
 	}
-	
-	public boolean hasEnoughFuel()
-	{
-		if(getDriver() == null)
-			return false;
-		return driverIsCreative() || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
-		
+
+	/**
+	 * Gets the standard fuel consumption rate of the driveable.
+	 * This is simply the static consumption rate of the driveable's type
+	 * multiplied by the engine's fuel consumption multiplier
+	 * @return	how many millibuckets per tick this driveable would consume.
+	 */
+	public float getStandardFuelConsumption() {
+		return getDriveableType().fuelConsumptionRate * driveableData.engine.fuelConsumption *
+				FlansConfig.vehicles.globalFuelUseMultiplier;
+	}
+	/**
+	 * Checks to see if the driveable can produce power to move.
+	 * This is true if the driver is in creative mode (in which case fuel doesn't matter)
+	 * or the game has vehiclesNeedFuel set to false.
+	 * or the fuel tank has enough fuel to power the driveable for another tick.
+	 * @param fuelConsumption 	The amount of fuel that would need to be consumed.
+	 * @return					True if the driveable can provide power to move, false otherwise.
+	 */
+	public boolean canProducePower(float fuelConsumption) {
+		return driverIsCreative() || driveableData.fuelTank.hasFuel(fuelConsumption) || !TeamsManager.vehiclesNeedFuel;
+	}
+	/**
+	 * Same as #canProducePower(getCurrentFuelConsumption());
+	 * @return	True if the driveable can provide power to move, false otherwise.
+	 */
+	public boolean canProducePower() {
+		return canProducePower(getCurrentFuelConsumption());
+	}
+
+	/**
+	 * Consumes a given amount of fuel from the fuel tank.
+	 * Will only consume fuel if there is a driver, and they are not in creative.
+	 * @param amount	The amount to consume (mb of fuel/RF)
+	 */
+	public void consumeFuel(float amount) {
+		if (!driverIsCreative() && TeamsManager.vehiclesNeedFuel) {
+			driveableData.fuelTank.consume(amount);
+		}
 	}
 	
 	public double getSpeedXYZ()

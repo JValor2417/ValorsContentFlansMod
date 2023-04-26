@@ -570,7 +570,7 @@ public class ClientProxy extends CommonProxy
 	
 	private void createJSONFile(File file, String contents) throws Exception
 	{
-		if(FlansMod.forceUpdateJSONs)
+		if(FlansConfig.forceUpdateJSONs)
 		{
 			if(file.exists())
 			{

@@ -2,6 +2,9 @@ package com.flansmod.common.driveables;
 
 import java.util.HashMap;
 
+import com.flansmod.common.driveables.fuel.InternalFuelTank;
+import com.flansmod.common.driveables.fuel.LiquidFuelTank;
+import com.flansmod.common.driveables.fuel.VehicleBattery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -38,7 +41,7 @@ public class DriveableData implements IInventory
 	/**
 	 * The amount of fuel in the tank
 	 */
-	public float fuelInTank;
+	public InternalFuelTank fuelTank;
 	/**
 	 * Each driveable part has a small class that holds its current status
 	 */
@@ -92,7 +95,13 @@ public class DriveableData implements IInventory
 			cargo[i] = new ItemStack(tag.getCompoundTag("Cargo " + i));
 		
 		fuel = new ItemStack(tag.getCompoundTag("Fuel"));
-		fuelInTank = tag.getInteger("FuelInTank");
+		if (engine.useRFPower) {
+			fuelTank = VehicleBattery.convertFromFuel(dType.fuelTankSize);
+		} else  {
+			fuelTank = new LiquidFuelTank(dType.fuelTankSize);
+		}
+		fuelTank.setFillAmount(tag.getInteger("FuelInTank"));
+
 		for(EnumDriveablePart part : EnumDriveablePart.values())
 		{
 			parts.put(part, new DriveablePart(part, dType.health.get(part)));
@@ -130,7 +139,7 @@ public class DriveableData implements IInventory
 		}
 		if(fuel != null)
 			tag.setTag("Fuel", fuel.writeToNBT(new NBTTagCompound()));
-		tag.setInteger("FuelInTank", (int)fuelInTank);
+		tag.setInteger("FuelInTank", (int)fuelTank.getFillLevel());
 		for(DriveablePart part : parts.values())
 		{
 			part.writeToNBT(tag);

@@ -3,6 +3,7 @@ package com.flansmod.common.guns;
 import java.util.Collections;
 import java.util.List;
 
+import com.flansmod.common.FlansConfig;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -88,7 +89,7 @@ public class ItemAttachment extends Item implements IPaintableItem
 			return;
 		
 		PaintableType type = ((IPaintableItem)this).GetPaintableType();
-		if(FlansMod.addAllPaintjobsToCreative)
+		if(FlansConfig.addAllPaintjobsToCreative)
 		{
 			for(Paintjob paintjob : type.paintjobs)
 				addPaintjobToList(this, type, paintjob, items);
