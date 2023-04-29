@@ -302,6 +302,12 @@ public class ClientRenderHooks
 					entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
 			float f4 = entityplayer.prevCameraPitch +
 					(entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
+
+			// Reduce bobbing when player is aiming
+			if (FlansModClient.currentScope != null) {
+				f3 *= 0.12f;
+			}
+
 			GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F,
 					-Math.abs(MathHelper.cos(f2 * (float)Math.PI) * f3), 0.0F);
 			GlStateManager.rotate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
