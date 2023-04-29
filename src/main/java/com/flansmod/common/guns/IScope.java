@@ -9,4 +9,6 @@ public interface IScope
 	boolean hasZoomOverlay();
 	
 	String getZoomOverlay();
+
+	boolean overlayUnrendersGun();
 }

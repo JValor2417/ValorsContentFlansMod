@@ -96,6 +96,10 @@ public class AttachmentType extends PaintableType implements IScope
 	 * Whether to overlay a texture or not
 	 */
 	public boolean hasScopeOverlay = false;
+	/**
+	 * Whether to unrender the gun when aiming
+	 */
+	public boolean overlayUnrendersGun = true;
 	
 	@SideOnly(Side.CLIENT)
 	/** Model. Only applicable when the attachment is added to 3D guns */
@@ -172,6 +176,8 @@ public class AttachmentType extends PaintableType implements IScope
 				else
 					zoomOverlay = split[1];
 			}
+			else if(split[0].equals("OverlayUnrendersGun"))
+				overlayUnrendersGun = Boolean.parseBoolean(split[1]);
 		}
 		catch(Exception e)
 		{
@@ -220,7 +226,13 @@ public class AttachmentType extends PaintableType implements IScope
 	{
 		return FOVZoomLevel;
 	}
-	
+
+	@Override
+	public boolean overlayUnrendersGun() {
+		return overlayUnrendersGun;
+	}
+
+
 	public static AttachmentType getAttachment(String s)
 	{
 		for(AttachmentType attachment : attachments)

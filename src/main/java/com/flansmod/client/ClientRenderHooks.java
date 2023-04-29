@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.item.Item;
 import org.lwjgl.util.glu.Project;
 
 import net.minecraft.block.material.Material;
@@ -74,6 +75,8 @@ import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
+
+import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
 public class ClientRenderHooks
@@ -643,22 +646,17 @@ public class ClientRenderHooks
 		
 		Tessellator tessellator = Tessellator.getInstance();
 
-		if(event.getType() == ElementType.CROSSHAIRS
-				&& FlansModClient.currentScope != null)
-		{
-			renderHitMarker(tessellator, i, j);
-			//event.setCanceled(true);
-			return;
-		}
-		
-		
 		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
 		{
 			renderScopeOverlay(i, j);
+			renderCrosshair(i, j); // Rendering this during the crosshairs event creates a black screen
 		}
 		if(event.isCancelable() && event.getType() == ElementType.CROSSHAIRS)
 		{
 			renderHitMarker(tessellator, i, j);
+			if (!FlansMod.DEBUG && getCrosshairTexture() != null) {
+				event.setCanceled(true);
+			}
 		}
 		if(!event.isCancelable() && event.getType() == ElementType.HOTBAR)
 		{
@@ -740,7 +738,54 @@ public class ClientRenderHooks
 			GlStateManager.disableBlend();
 		}
 	}
-	
+
+	@Nullable
+	private ResourceLocation getCrosshairTexture()
+	{
+		// If player exists and player isn't aiming down scope
+		if (mc.player != null && FlansModClient.currentScope == null) {
+			// Getting a gun in the player's hand. This will prefer the player's main hand when choosing crosshairs.
+			Item gunItem = mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem();
+			if (!(gunItem instanceof ItemGun)) {
+				gunItem = mc.player.getHeldItem(EnumHand.OFF_HAND).getItem();
+			}
+
+			if (gunItem instanceof ItemGun) {
+				String textureLocation = ((ItemGun) gunItem).GetType().hipfireCrosshairTexture;
+				if (textureLocation != null && !textureLocation.isEmpty()) {
+					return FlansModResourceHandler.getScope(textureLocation);
+				}
+			}
+		}
+		return null;
+	}
+
+	private void renderCrosshair(int i, int j)
+	{
+		ResourceLocation crosshairTexture = getCrosshairTexture();
+		if (FlansModClient.currentScope == null && crosshairTexture != null) {
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+					GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+					GlStateManager.DestFactor.ZERO);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.disableAlpha();
+			mc.renderEngine.bindTexture(crosshairTexture);
+			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+			worldrenderer.startDrawingQuads();
+			worldrenderer.addVertexWithUV(i / 2d - 2 * j, j, -90D, 0.0D, 1.0D);
+			worldrenderer.addVertexWithUV(i / 2d + 2 * j, j, -90D, 1.0D, 1.0D);
+			worldrenderer.addVertexWithUV(i / 2d + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+			worldrenderer.addVertexWithUV(i / 2d - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+			worldrenderer.draw();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableDepth();
+			GlStateManager.enableAlpha();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		}
+	}
+
 	private void renderPlayerAmmo(int i, int j)
 	{
 		// Player ammo overlay

@@ -124,7 +124,7 @@ public class RenderGun implements CustomItemRenderer
 				case EQUIPPED_FIRST_PERSON:
 				{
 					IScope scope = gunType.getCurrentScope(item);
-					if(FlansModClient.zoomProgress > 0.9F && scope.hasZoomOverlay())
+					if(FlansModClient.zoomProgress > 0.9F && scope.hasZoomOverlay() && scope.overlayUnrendersGun())
 					{
 						GlStateManager.popMatrix();
 						return;

@@ -269,6 +269,10 @@ public class GunType extends PaintableType implements IScope
 	 * The FOV zoom level of the default scope
 	 */
 	public float FOVFactor = 1.5F;
+	/**
+	 * Whether to unrender the gun when aiming
+	 */
+	public boolean overlayUnrendersGun = true;
 	
 	/**
 	 * For guns with 3D models
@@ -314,7 +318,10 @@ public class GunType extends PaintableType implements IScope
 	 * Gives knockback resistance to the player
 	 */
 	public float knockbackModifier = 0F;
-	
+	/**
+	 * Location of the texture of the crosshair when hipfiring
+	 */
+	public String hipfireCrosshairTexture;
 	
 	public GunType(TypeFile file)
 	{
@@ -437,6 +444,8 @@ public class GunType extends PaintableType implements IScope
 					hasScopeOverlay = false;
 				else defaultScopeTexture = split[1];
 			}
+			else if(split[0].equals("OverlayUnrendersGun"))
+				overlayUnrendersGun = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("ZoomLevel"))
 			{
 				zoomLevel = Float.parseFloat(split[1]);
@@ -476,6 +485,7 @@ public class GunType extends PaintableType implements IScope
 			oneHanded = Read(split, "OneHanded", oneHanded);
 			usableByPlayers = Read(split, "UsableByPlayers", usableByPlayers);
 			usableByMechas = Read(split, "UsableByMechas", usableByMechas);
+			hipfireCrosshairTexture = Read(split, "HipfireCrosshairTexture", hipfireCrosshairTexture);
 			
 			if(split[0].equals("SpreadPattern"))
 				spreadPattern = EnumSpreadPattern.get(split[1]);
@@ -602,7 +612,12 @@ public class GunType extends PaintableType implements IScope
 	{
 		return defaultScopeTexture;
 	}
-	
+
+	@Override
+	public boolean overlayUnrendersGun() {
+		return overlayUnrendersGun;
+	}
+
 	@Override
 	public float getFOVFactor()
 	{
