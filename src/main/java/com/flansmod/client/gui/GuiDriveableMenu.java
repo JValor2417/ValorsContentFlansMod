@@ -1,5 +1,6 @@
 package com.flansmod.client.gui;
 
+import com.flansmod.common.FlansConfig;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,6 +36,9 @@ public class GuiDriveableMenu extends GuiContainer
 	{
 		super.initGui();
 		DriveableType type = entity.getDriveableType();
+		// Gui gets locked if vehicle is moving too fast
+		boolean withinSpeedLimit = FlansConfig.vehicles.canInteract((float)entity.getSpeed());
+
 		//Cargo button
 		GuiButton cargoButton = new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Cargo");
 		cargoButton.enabled = type.numCargoSlots > 0;
@@ -42,26 +46,27 @@ public class GuiDriveableMenu extends GuiContainer
 		
 		//Gun button
 		GuiButton gunsButton = new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, "Guns");
-		gunsButton.enabled = type.ammoSlots() > 0;
+		gunsButton.enabled = type.ammoSlots() > 0 && withinSpeedLimit;
 		buttonList.add(gunsButton);
 		
 		//Fuel button
 		GuiButton fuelButton = new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel");
-		fuelButton.enabled = type.fuelTankSize > 0;
+		fuelButton.enabled = type.fuelTankSize > 0 && withinSpeedLimit;
 		buttonList.add(fuelButton);
 		
 		//Missile / Shell Button
 		GuiButton missileButton = new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, entity.getMissileInventoryName());
-		missileButton.enabled = type.numMissileSlots > 0;
+		missileButton.enabled = type.numMissileSlots > 0 && withinSpeedLimit;
 		buttonList.add(missileButton);
 		
 		//Mine / Bomb Button
 		GuiButton bombButton = new GuiButton(5, width / 2 + 2, height / 2 - 27, 58, 20, entity.getBombInventoryName());
-		bombButton.enabled = type.numBombSlots > 0;
+		bombButton.enabled = type.numBombSlots > 0 && withinSpeedLimit;
 		buttonList.add(bombButton);
 		
 		//Repair button
-		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
+		GuiButton repairButton = new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair");
+		buttonList.add(repairButton);
 	}
 	
 	@Override

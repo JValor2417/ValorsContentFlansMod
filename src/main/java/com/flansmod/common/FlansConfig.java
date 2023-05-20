@@ -65,11 +65,11 @@ public final class FlansConfig {
 		@Name("Max Speed for GUI Interaction")
 		@Comment({
 			"If a vehicle is moving faster than this speed, its GUI will be locked.",
-			"That means the player can no longer interact with its inventory, weapon, and fuel slots",
-			"essentially, this means players can no longer refuel and rearm while on the move.",
+			"That means the player can no longer interact with its weapon and fuel slots",
+			"essentially, this means players can't refuel and rearm while on the move.",
 			"Measured in blocks/tick, set to negative value (e.g. -1) to allow refueling and rearming on the move."
 		})
-		public float maxInteractSpeed = 1F;
+		public float maxInteractSpeed = 0.2F;
 
 		/**
 		 * Check to see whether or not the given fluid is a compatible fuel

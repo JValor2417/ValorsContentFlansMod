@@ -710,7 +710,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public double getSpeed()
 	{
-		return Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+		if (world.isRemote) {
+			// Client side vehicles don't seem to store any motion data
+			double dX = posX - prevPosX;
+			double dY = posY - prevPosY;
+			double dZ = posZ - prevPosZ;
+
+			return Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+		}
+		else
+			return Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
 	}
 	
 	public Vector3f getOrigin(ShootPoint shootPoint)

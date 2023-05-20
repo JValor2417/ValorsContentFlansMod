@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flansmod.common.FlansConfig;
 import com.flansmod.common.driveables.fuel.InternalFuelTank;
 import com.flansmod.common.driveables.fuel.LiquidFuelTank;
+import com.flansmod.common.driveables.fuel.VehicleBattery;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,7 +41,11 @@ public class GuiDriveableFuel extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j)
 	{
-		fontRenderer.drawString(plane.getDriveableType().name + " - Fuel", 6, 6, 0x404040);
+		if (plane.driveableData.fuelTank instanceof VehicleBattery) {
+			fontRenderer.drawString(plane.getDriveableType().name + " - Charge", 6, 6, 0x404040);
+		} else {
+			fontRenderer.drawString(plane.getDriveableType().name + " - Fuel", 6, 6, 0x404040);
+		}
 		fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 	}
 
