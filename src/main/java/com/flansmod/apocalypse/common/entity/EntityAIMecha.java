@@ -170,19 +170,7 @@ public class EntityAIMecha extends EntityMecha
 			return true;
 		return false;
 	}
-	
-	@Override
-	public boolean hasFuel()
-	{
-		return true;
-	}
 
-	@Override
-	public boolean hasEnoughFuel()
-	{
-		return true;
-	}
-	
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
@@ -196,5 +184,10 @@ public class EntityAIMecha extends EntityMecha
 			return false;
 		}
 		else return super.attackEntityFrom(damagesource, i);
+	}
+
+	@Override
+	public boolean canProducePower(float fuelConsumption) {
+		return true;
 	}
 }
