@@ -1453,7 +1453,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	 * @return	how many millibuckets per tick this driveable would consume.
 	 */
 	public float getCurrentFuelConsumption() {
-		return getStandardFuelConsumption() * throttle;
+		return getStandardFuelConsumption() * Math.abs(throttle);
 	}
 
 	/**
