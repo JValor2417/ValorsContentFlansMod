@@ -321,7 +321,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		//Aesthetics
 		//Rotate the wheels
-		if(hasEnoughFuel())
+		if(canProducePower())
 		{
 			wheelsAngle += throttle * 0.2F;
 		}
@@ -386,12 +386,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			//Apply velocity
 			EntityPlayer driver = getDriver();
-			if(canThrust(data, driver))
+			if(canProducePower())
 			{
-				if (!driverIsCreative())
-				{
-					data.fuelInTank -= data.engine.fuelConsumption * Math.abs(throttle);
-				}
+				consumeFuel(getCurrentFuelConsumption());
 
 				if(getVehicleType().tank)
 				{
@@ -515,13 +512,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		//Sounds
 		//Starting sound
-		if(throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && canProducePower())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
 		//Flying sound
-		if(throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.2F && soundPosition == 0 && canProducePower())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;
@@ -604,12 +601,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		PostUpdate();
 	}
 
-	private boolean canThrust(DriveableData data, EntityPlayer driver) {
-		return !TeamsManager.vehiclesNeedFuel
-				|| driverIsCreative()
-				|| (data.engine != null && data.fuelInTank > data.engine.fuelConsumption * throttle);
-	}
-
 	public void animateFancyTracks()
 	{
 		float funkypart = getVehicleType().trackLinkFix;
@@ -639,7 +630,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			trackLinksLeft[i].zRot = Lerp(trackLinksLeft[i].zRot, newAngle, (part != (funkypart + funk2)) ? 0.5F : 1);
 			
 		}
-		
+
 		for(int i = 0; i < trackLinksRight.length; i++)
 		{
 			trackLinksRight[i].prevPosition = trackLinksRight[i].position;

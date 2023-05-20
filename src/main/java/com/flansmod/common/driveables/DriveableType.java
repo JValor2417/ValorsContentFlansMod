@@ -28,8 +28,8 @@ import com.flansmod.common.vector.Vector3f;
 
 public abstract class DriveableType extends PaintableType
 {
-	@SideOnly(value = Side.CLIENT)
 	/** The plane model */
+	@SideOnly(value = Side.CLIENT)
 	public ModelDriveable model;
 	
 	//Health and recipe
@@ -96,6 +96,12 @@ public abstract class DriveableType extends PaintableType
 	public int numCargoSlots, numBombSlots, numMissileSlots;
 	/** The fuel tank size */
 	public int fuelTankSize = 100;
+	/**
+	 * The standard fuel consumption rate with an engine that has a fuelConsumption multiplier of 1.
+	 * Measured in mb/t for liquid fuels.
+	 * Multiply by 1200 for the RF/t consumption rate.
+	 */
+	public float fuelConsumptionRate = 0.25F;
 	
 	//Rendering variables
 	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
@@ -263,6 +269,7 @@ public abstract class DriveableType extends PaintableType
 		parsers.put("CanRoll", (split, d) -> d.canRoll = Boolean.parseBoolean(split[1]));
 		parsers.put("YOffset", (split, d) -> d.yOffset = Float.parseFloat(split[1]));
 		parsers.put("CameraDistance", (split, d) -> d.cameraDistance = Float.parseFloat(split[1]));
+		parsers.put("FuelConsumptionRate", (split, d) -> d.fuelConsumptionRate = Float.parseFloat(split[1]));
 		
 		// BOATS ////////////////////////////////////////////////////////////////////////////
 		parsers.put("PlaceableOnLand", (split, d) -> d.placeableOnLand = Boolean.parseBoolean(split[1]));

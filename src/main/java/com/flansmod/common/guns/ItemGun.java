@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.flansmod.common.*;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Multimap;
@@ -50,10 +51,6 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.model.GunAnimations;
-import com.flansmod.common.EntityItemCustomRender;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
@@ -101,7 +98,7 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
-		if(FlansMod.shootOnRightClick)
+		if(FlansConfig.client.shootOnRightClick)
 			return hand == EnumHand.MAIN_HAND ? rightMouseHeld : leftMouseHeld;
 		else
 			return hand == EnumHand.MAIN_HAND ? leftMouseHeld : rightMouseHeld;
@@ -109,7 +106,7 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	private static boolean GetLastMouseHeld(EnumHand hand)
 	{
-		if(FlansMod.shootOnRightClick)
+		if(FlansConfig.client.shootOnRightClick)
 			return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
 		else
 			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld;
@@ -117,14 +114,14 @@ public class ItemGun extends Item implements IPaintableItem
 
 	private static boolean IsClickConsumed(EnumHand hand)
 	{
-		if(FlansMod.shootOnRightClick)
+		if(FlansConfig.client.shootOnRightClick)
 			return hand == EnumHand.MAIN_HAND ? rightClickConsumed : leftClickConsumed;
 		else
 			return hand == EnumHand.MAIN_HAND ? leftClickConsumed : rightClickConsumed;
 	}
 
 	private static void ConsumeClick(EnumHand hand) {
-		if (FlansMod.shootOnRightClick) {
+		if (FlansConfig.client.shootOnRightClick) {
 			if (hand == EnumHand.MAIN_HAND) {
 				rightClickConsumed = true;
 			} else {
@@ -1293,7 +1290,7 @@ public class ItemGun extends Item implements IPaintableItem
 			return;
 		
 		PaintableType type = ((IPaintableItem)this).GetPaintableType();
-		if(FlansMod.addAllPaintjobsToCreative)
+		if(FlansConfig.addAllPaintjobsToCreative)
 		{
 			for(Paintjob paintjob : type.paintjobs)
 				addPaintjobToList(this, type, paintjob, items);

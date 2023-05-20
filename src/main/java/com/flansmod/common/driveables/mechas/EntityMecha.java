@@ -3,6 +3,7 @@ package com.flansmod.common.driveables.mechas;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.flansmod.common.driveables.fuel.LiquidFuelTank;
 import io.netty.buffer.ByteBuf;
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
@@ -236,14 +237,11 @@ public class EntityMecha extends EntityDriveable
 		{
 			case 4: //Jump
 			{
-				boolean canThrustCreatively = getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-						&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode;
-				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
+				if(onGround && jumpDelay == 0 && canProducePower(getStandardFuelConsumption()) && isPartIntact(EnumDriveablePart.hips))
 				{
 					jumpDelay = 20;
 					motionY += type.jumpVelocity;
-					if(!canThrustCreatively)
-						data.fuelInTank -= data.engine.fuelConsumption;
+					consumeFuel(getStandardFuelConsumption());
 				}
 				return true;
 			}
@@ -560,15 +558,12 @@ public class EntityMecha extends EntityDriveable
 				&& thePlayerIsDrivingThis
 				&& FlansMod.proxy.isKeyDown(4)
 				&& shouldFly()
-				&& (isCreative || data.fuelInTank >= (10F * jetPackPower)))
+				&& canProducePower (10F * jetPackPower))
 		{
 			motionY *= 0.95;
 			motionY += (0.07 * jetPackPower);
 			fallDistance = 0;
-			if(!isCreative)
-			{
-				data.fuelInTank -= (10F * jetPackPower);
-			}
+			consumeFuel(10 * jetPackPower);
 			if(rocketTimer <= 0 && rocketPack().soundEffect != null)
 			{
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, rocketPack().soundEffect, false);
@@ -625,21 +620,20 @@ public class EntityMecha extends EntityDriveable
 
 				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier()) * (4.3F / 20F));
 
-				if((isCreative || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
+				if(canProducePower(getStandardFuelConsumption()) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(!onGround && shouldFly() && (isCreative || data.fuelInTank > 10F * jetPackPower + data.engine.fuelConsumption))
+
+					//If we still have fuel remaining to use the jetpack
+					if(!onGround && shouldFly() && canProducePower(10F * jetPackPower) )
 					{
 						intent.scale(jetPackPower);
-						if(!isCreative)
-							data.fuelInTank -= 10F * jetPackPower;
+						consumeFuel(10F * jetPackPower);
 					}
 
 					//Move!
 					Vector3f.add(actualMotion, intent, actualMotion);
-
-					//If we can't thrust creatively, we must thrust using fuel. Nom.
-					if(!isCreative)
-						data.fuelInTank -= data.engine.fuelConsumption;
+					//Consume fuel
+					consumeFuel(getStandardFuelConsumption());
 				}
 			}
 
@@ -788,27 +782,25 @@ public class EntityMecha extends EntityDriveable
 		for(ItemStack stack : drops)
 		{
 			//Check for iron regarding refining
-			boolean fuelCheck = (data.fuelInTank >= 5F || isCreative);
+			boolean fuelCheck = canProducePower(5f);
 			if(fuelCheck
 					&& refineIron()
 					&& stack.getItem() instanceof ItemBlock
 					&& ((ItemBlock)stack.getItem()).getBlock() == Blocks.IRON_ORE)
 			{
 				stack = (new ItemStack(Items.IRON_INGOT, 1, 0));
-				if(!isCreative)
-					data.fuelInTank -= 5F;
+				consumeFuel(5f);
 			}
 			
 			//Check for waste to be compacted
-			fuelCheck = (data.fuelInTank >= 0.1F || isCreative);
+			fuelCheck = canProducePower(0.1F);
 			if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock &&
 					(((ItemBlock)stack.getItem()).getBlock() == Blocks.COBBLESTONE
 							|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.DIRT
 							|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.SAND))
 			{
 				stack.setCount(0);
-				if(!isCreative)
-					data.fuelInTank -= 0.1F;
+				consumeFuel(0.1F);
 			}
 			
 			//Check for item multipliers
@@ -823,23 +815,27 @@ public class EntityMecha extends EntityDriveable
 				Item item = itemToFuelUsageAndMultiplier._1;
 				float fuelUsage = itemToFuelUsageAndMultiplier._2;
 				float multiplier = itemToFuelUsageAndMultiplier._3;
-				
-				fuelCheck = (data.fuelInTank >= fuelUsage * multiplier || isCreative);
+
+				fuelCheck = canProducePower(fuelUsage * multiplier);
 				if(fuelCheck && stack.getItem() == item)
 				{
 					stack.setCount(stack.getCount() * (
 							MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-					if(!isCreative)
-						data.fuelInTank -= fuelUsage * multiplier;
+					consumeFuel(fuelUsage * multiplier);
 				}
 			}
-			
-			//Check for auto coal consumption
-			if(autoCoal() && (stack.getItem() == Items.COAL) && (data.fuelInTank + 250F < type.fuelTankSize))
+
+			//Check for auto coal consumption and makes this the vehicle uses a liquid fuel tank
+			//I know that coal isn't a liquid. It doesn't make sense, but it is what it is.
+			if(autoCoal() && (stack.getItem() == Items.COAL) && data.fuelTank instanceof LiquidFuelTank)
 			{
-				data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
-				couldNotFindFuel = false;
-				stack.setCount(0);
+				LiquidFuelTank fuelTank = (LiquidFuelTank) data.fuelTank;
+				//Insert the fuel for real this time
+				if ((fuelTank.receiveFuel(200, true) == 200)) {
+					fuelTank.receiveFuel(200, false);
+					couldNotFindFuel = false;
+					stack.setCount(0);
+				}
 			}
 			
 			//Add the itemstack to mecha inventory
@@ -949,12 +945,10 @@ public class EntityMecha extends EntityDriveable
 			for(EnumDriveablePart part : EnumDriveablePart.values())
 			{
 				DriveablePart thisPart = data.parts.get(part);
-				boolean hasCreativePlayer = playerDriver != null && isCreative;
-				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
+				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && canProducePower(10f))
 				{
 					thisPart.health += 1;
-					if(!hasCreativePlayer)
-						data.fuelInTank -= 10F;
+					consumeFuel(10f);
 				}
 			}
 			toggleTimer = 20;

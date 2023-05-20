@@ -1,28 +1,32 @@
 package com.flansmod.common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import org.apache.logging.log4j.Logger;
-
+import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
+import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EntityWheel;
+import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.driveables.mechas.ItemMecha;
+import com.flansmod.common.enchantments.EnchantmentModule;
+import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
+import com.flansmod.common.guns.EntityAAGun;
+import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityGrenade;
+import com.flansmod.common.guns.EntityMG;
+import com.flansmod.common.network.PacketHandler;
+import com.flansmod.common.paintjob.BlockPaintjobTable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
+import com.flansmod.common.parts.ItemPart;
+import com.flansmod.common.teams.*;
+import com.flansmod.common.tools.EntityParachute;
+import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.types.EnumType;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTNT;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -39,12 +43,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryItem;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetCount;
@@ -56,13 +55,10 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -73,72 +69,16 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import org.apache.logging.log4j.Logger;
 
-import com.flansmod.client.debug.EntityDebugDot;
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.common.driveables.EntityPlane;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.driveables.EntityVehicle;
-import com.flansmod.common.driveables.EntityWheel;
-import com.flansmod.common.driveables.ItemPlane;
-import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.driveables.PlaneType;
-import com.flansmod.common.driveables.VehicleType;
-import com.flansmod.common.driveables.mechas.EntityMecha;
-import com.flansmod.common.driveables.mechas.ItemMecha;
-import com.flansmod.common.driveables.mechas.ItemMechaAddon;
-import com.flansmod.common.driveables.mechas.MechaItemType;
-import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.enchantments.EnchantmentModule;
-import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
-import com.flansmod.common.guns.AAGunType;
-import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityAAGun;
-import com.flansmod.common.guns.EntityBullet;
-import com.flansmod.common.guns.EntityGrenade;
-import com.flansmod.common.guns.EntityMG;
-import com.flansmod.common.guns.GrenadeType;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemAAGun;
-import com.flansmod.common.guns.ItemAttachment;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGrenade;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.boxes.BlockGunBox;
-import com.flansmod.common.guns.boxes.GunBoxType;
-import com.flansmod.common.network.PacketHandler;
-import com.flansmod.common.paintjob.BlockPaintjobTable;
-import com.flansmod.common.paintjob.TileEntityPaintjobTable;
-import com.flansmod.common.parts.ItemPart;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.teams.ArmourBoxType;
-import com.flansmod.common.teams.ArmourType;
-import com.flansmod.common.teams.BlockArmourBox;
-import com.flansmod.common.teams.BlockSpawner;
-import com.flansmod.common.teams.CommandTeams;
-import com.flansmod.common.teams.EntityFlag;
-import com.flansmod.common.teams.EntityFlagpole;
-import com.flansmod.common.teams.EntityGunItem;
-import com.flansmod.common.teams.EntityTeamItem;
-import com.flansmod.common.teams.ItemFlagpole;
-import com.flansmod.common.teams.ItemOpStick;
-import com.flansmod.common.teams.ItemRewardBox;
-import com.flansmod.common.teams.ItemTeamArmour;
-import com.flansmod.common.teams.LoadoutPool;
-import com.flansmod.common.teams.PlayerClass;
-import com.flansmod.common.teams.RewardBox;
-import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.teams.TeamsManagerRanked;
-import com.flansmod.common.teams.TileEntitySpawner;
-import com.flansmod.common.tools.EntityParachute;
-import com.flansmod.common.tools.ItemTool;
-import com.flansmod.common.tools.ToolType;
-import com.flansmod.common.types.EnumType;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 @Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
@@ -162,11 +102,6 @@ public class FlansMod
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
 	public static boolean isApocalypseLoaded = false;
-	public static boolean addAllPaintjobsToCreative = false;
-	public static boolean addGunpowderRecipe = true;
-	public static boolean shootOnRightClick = false;
-	public static boolean forceUpdateJSONs = false;
-	public static boolean enchantmentModuleEnabled = true;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -241,15 +176,10 @@ public class FlansMod
 		
 		proxy.preInit();
 		proxy.registerRenderers();
+
 		
-		configFile = new Configuration(event.getSuggestedConfigurationFile());
-		syncConfig();
-		
-		if(enchantmentModuleEnabled)
+		if(FlansConfig.enchantmentModuleEnabled)
 			enchantmentModule.PreInit();
-		//TODO : Load properties
-		//configuration = new Configuration(event.getSuggestedConfigurationFile());
-		//loadProperties();
 		
 		try
 		{
@@ -319,7 +249,7 @@ public class FlansMod
 		//Do proxy loading
 		proxy.init();
 		
-		if(enchantmentModuleEnabled)
+		if(FlansConfig.enchantmentModuleEnabled)
 			enchantmentModule.Init();
 		
 		//Initialising handlers
@@ -355,7 +285,7 @@ public class FlansMod
 		{
 			type.addRecipe(event.getRegistry());
 		}
-		if(addGunpowderRecipe)
+		if(FlansConfig.addGunpowderRecipe)
 		{
 			NonNullList<Ingredient> ingredients = NonNullList.create();
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST)));
@@ -565,7 +495,7 @@ public class FlansMod
 	{
 		packetHandler.postInitialise();
 		
-		if(enchantmentModuleEnabled)
+		if(FlansConfig.enchantmentModuleEnabled)
 			enchantmentModule.PostInit();
 		
 		hooks.hook();
@@ -600,14 +530,7 @@ public class FlansMod
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
 	}
-	
-	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs)
-	{
-		if(eventArgs.getModID().equals(MODID))
-			syncConfig();
-	}
-	
+
 	@SubscribeEvent
 	public void onLivingSpecialSpawn(EntityJoinWorldEvent event)
 	{
@@ -765,19 +688,7 @@ public class FlansMod
 	{
 		return INSTANCE.packetHandler;
 	}
-	
-	public static void syncConfig()
-	{
-		addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
-		shootOnRightClick = configFile.getBoolean("ShootOnRightClick", Configuration.CATEGORY_GENERAL, shootOnRightClick, "If true, then shoot will be on right click");
-		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
-		forceUpdateJSONs = configFile.getBoolean("ForceUpdateJSONs", Configuration.CATEGORY_GENERAL, forceUpdateJSONs, "Turn this on to force re-create all JSON files. Should only be used in dev environment");
-		enchantmentModuleEnabled = configFile.getBoolean("EnchantmentModuleEnabled", Configuration.CATEGORY_GENERAL, enchantmentModuleEnabled, "Enable gun-related enchantments");
-		
-		if(configFile.hasChanged())
-			configFile.save();
-	}
-	
+
 	public static void Assert(boolean b, String string)
 	{
 		if(!b)

@@ -50,20 +50,7 @@ public class EntityFlyByPlane extends EntityPlane
 	}
 
 	@Override
-	public boolean canThrust()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean hasFuel()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean hasEnoughFuel()
-	{
+	public boolean canProducePower(float fuelConsumption) {
 		return true;
 	}
 }

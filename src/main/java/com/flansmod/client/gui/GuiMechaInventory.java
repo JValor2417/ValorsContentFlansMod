@@ -1,17 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.model.RenderMecha;
@@ -20,6 +8,15 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.mechas.ContainerMechaInventory;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.MechaType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import java.io.IOException;
 
 public class GuiMechaInventory extends GuiContainer
 {
@@ -95,8 +92,8 @@ public class GuiMechaInventory extends GuiContainer
 			if(newTime % 5 == 0)
 				anim++;
 		}
-		int fuelTankSize = mecha.getMechaType().fuelTankSize;
-		float fuelInTank = mecha.driveableData.fuelInTank;
+		float fuelTankSize = mecha.driveableData.fuelTank.getMaxFillLevel();
+		float fuelInTank = mecha.driveableData.fuelTank.getFillLevel();
 		if(fuelInTank < fuelTankSize / 8 && (anim % 4) > 1)
 			drawTexturedModalRect(width / 2 - 14, height / 2 - 59, 360, 0, 6, 6);
 		if(fuelInTank > 0)

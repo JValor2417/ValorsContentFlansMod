@@ -180,9 +180,7 @@ public class EntityPlane extends EntityDriveable
 	{
 		PlaneType type = this.getPlaneType();
 		//Send keys which require server side updates to the server
-		boolean canThrust = ((getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode)
-				|| getDriveableData().fuelInTank > 0) && hasWorkingProp();
+		boolean canThrust = canProducePower();
 		switch(key)
 		{
 			case 0: //Accelerate : Increase the throttle, up to 1.
@@ -361,7 +359,7 @@ public class EntityPlane extends EntityDriveable
 		
 		//Aesthetics
 		//Rotate the propellers
-		if(hasEnoughFuel())
+		if(canProducePower())
 		{
 			propAngle += (Math.pow(throttle, 0.4)) * 1.5;
 		}
@@ -404,7 +402,7 @@ public class EntityPlane extends EntityDriveable
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
 		if(getSeat(0) != null && getSeat(0).getControllingPassenger() != null && mode == EnumPlaneMode.HELI &&
-				canThrust())
+				canProducePower())
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 		
 		//Get the speed of the plane
@@ -460,13 +458,11 @@ public class EntityPlane extends EntityDriveable
 		
 		float throttleScaled = 0.01F * (type.maxThrottle + (data.engine == null ? 0 : data.engine.engineSpeed));
 		
-		if(!canThrust())
+		if(!canProducePower())
 			throttleScaled = 0;
 		
 		int numPropsWorking = 0;
 		int numProps = 0;
-		
-		float fuelConsumptionMultiplier = 2F;
 		
 		switch(mode)
 		{
@@ -508,8 +504,8 @@ public class EntityPlane extends EntityDriveable
 				motionX *= drag;
 				motionY *= drag;
 				motionZ *= drag;
-				
-				data.fuelInTank -= upwardsForce * fuelConsumptionMultiplier * data.engine.fuelConsumption;
+
+				consumeFuel(getCurrentFuelConsumption());
 				
 				break;
 			
@@ -570,8 +566,8 @@ public class EntityPlane extends EntityDriveable
 				motionX *= drag;
 				motionY *= drag;
 				motionZ *= drag;
-				
-				data.fuelInTank -= throttleScaled * fuelConsumptionMultiplier * data.engine.fuelConsumption;
+
+				consumeFuel(getCurrentFuelConsumption());
 				break;
 			default:
 				break;
@@ -717,13 +713,13 @@ public class EntityPlane extends EntityDriveable
 		
 		//Sounds
 		//Starting sound
-		if(throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && canProducePower())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
 		//Flying sound
-		if(throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.2F && soundPosition == 0 && canProducePower())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;
@@ -754,14 +750,16 @@ public class EntityPlane extends EntityDriveable
 		
 		PostUpdate();
 	}
-	
-	public boolean canThrust()
-	{
-		return (getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode) ||
-				driveableData.fuelInTank > 0;
+
+	@Override
+	public boolean canProducePower(float consumption) {
+		return hasWorkingProp() && super.canProducePower(consumption);
 	}
-	
+	@Override
+	public boolean canProducePower() {
+		return canProducePower(getCurrentFuelConsumption());
+	}
+
 	@Override
 	public void setDead()
 	{
