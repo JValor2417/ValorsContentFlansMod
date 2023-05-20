@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
@@ -158,54 +158,49 @@ public class LiquidFuelTank extends InternalFuelTank {
 	@Override
 	public ItemStack handleFuelItem(@Nonnull ItemStack stack) {
 		Item item = stack.getItem();
-		
-		if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-			IFluidHandlerItem fuelItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
-			if (fuelItem != null) {
-				IFluidTankProperties[] fluidTanksToDrain = fuelItem.getTankProperties();
+		IFluidHandlerItem fuelItem = FluidUtil.getFluidHandler(stack);
 
-				for (IFluidTankProperties fluidTank : fluidTanksToDrain) {
-					//Checking to make sure container isn't empty and the fuel inside is actually a fuel
-					FluidStack fuelStack = fluidTank.getContents();
-					if (fuelStack != null && FlansConfig.vehicles.isFuel(fuelStack.getFluid())) {
-						Fluid fluidToDrain = fuelStack.getFluid();
-						// Forge fluid buckets.
-						// Buckets must transfer the full 1000 mb in one tick, so they have special handling
-						if (item instanceof UniversalBucket) {
-							//Checking to see if the fuel tank can hold 1000mb more
-							if (this.receiveFuelBucket(fluidToDrain, true) == Fluid.BUCKET_VOLUME) {
-								//Fill the tank
-								this.receiveFuelBucket(fluidToDrain, false);
+		if (fuelItem != null) {
+			IFluidTankProperties[] fluidTanksToDrain = fuelItem.getTankProperties();
 
-								//Drain the bucket stack
-								stack.shrink(1);
+			for (IFluidTankProperties fluidTank : fluidTanksToDrain) {
+				//Checking to make sure container isn't empty and the fuel inside is actually a fuel
+				FluidStack fuelStack = fluidTank.getContents();
+				if (fuelStack != null && FlansConfig.vehicles.isFuel(fuelStack.getFluid())) {
+					Fluid fluidToDrain = fuelStack.getFluid();
+					// Forge fluid buckets.
+					// Buckets must transfer the full 1000 mb in one tick, so they have special handling
+					if (item instanceof UniversalBucket) {
+						//Checking to see if the fuel tank can hold 1000mb more
+						if (this.receiveFuelBucket(fluidToDrain, true) == Fluid.BUCKET_VOLUME) {
+							//Fill the tank
+							this.receiveFuelBucket(fluidToDrain, false);
 
-								//Returning empty bucket
-								if (stack.isEmpty()) {
-									stack = new ItemStack(item);
-								}
-							}
+							//Drain the bucket
+							fuelItem.drain(Fluid.BUCKET_VOLUME, true);
 
-							//Normal fluid containers
-						} else {
-							//Check to see how much we can drain first
-							FluidStack amountToDrain = fuelItem.drain(fuelStack, false);
-
-							if (amountToDrain != null) {
-								//Filling the internal tank
-								int amountTransferred = this.receiveFuel(amountToDrain, false);
-
-								//Draining the item
-								fuelItem.drain(new FluidStack(fluidToDrain, amountTransferred), true);
-							}
+							//Returning empty bucket
+							stack = fuelItem.getContainer();
 						}
-						break; //Only drain one container at a time. Once we find one, we'll move on to next tick.
+
+						//Normal fluid containers
+					} else {
+						//Check to see how much we can drain first
+						FluidStack amountToDrain = fuelItem.drain(fuelStack, false);
+
+						if (amountToDrain != null) {
+							//Filling the internal tank
+							int amountTransferred = this.receiveFuel(amountToDrain, false);
+
+							//Draining the item
+							fuelItem.drain(new FluidStack(fluidToDrain, amountTransferred), true);
+						}
 					}
+					break; //Only drain one container at a time. Once we find one, we'll move on to next tick.
 				}
 			}
 		}
-		
 		/*
 		 * This bit looks for Flan's Mod fuel items
 		 */
