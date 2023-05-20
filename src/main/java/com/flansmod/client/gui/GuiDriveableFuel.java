@@ -1,7 +1,12 @@
 package com.flansmod.client.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.flansmod.common.driveables.fuel.InternalFuelTank;
+import com.flansmod.common.driveables.fuel.LiquidFuelTank;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -70,6 +75,27 @@ public class GuiDriveableFuel extends GuiContainer
 	{
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		renderHoveredToolTip(mouseX, mouseY);
+
+		int i = (this.width - this.xSize) / 2;
+		int j = (this.height - this.ySize) / 2;
+
+		InternalFuelTank fuelTank = plane.driveableData.fuelTank;
+		int fuelInTank = (int)fuelTank.getFillLevel();
+		int fuelTankSize = (int)fuelTank.getMaxFillLevel();
+		if (mouseX >= i + 26 && mouseX <= i + 155 && mouseY >= j + 21 && mouseY <= j + 36)
+		{
+			List<String> lines = new ArrayList<>();
+			if (fuelTank instanceof LiquidFuelTank)
+			{
+				lines.add(String.format("%d / %d mb", fuelInTank, fuelTankSize));
+			}
+			else
+			{
+				lines.add(String.format("%d / %d RF", fuelInTank, fuelTankSize));
+			}
+
+			this.drawHoveringText(lines, mouseX, mouseY);
+		}
 	}
 	
 	@Override
