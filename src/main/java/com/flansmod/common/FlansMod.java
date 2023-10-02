@@ -536,9 +536,9 @@ public class FlansMod
 	{
 		double chance = event.getWorld().rand.nextDouble();
 		
-		if(chance < armourSpawnRate && event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton)
+		if(chance < FlansConfig.armourSpawnRate && (event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton))
 		{
-			if(event.getWorld().rand.nextBoolean() && ArmourType.armours.size() > 0)
+			if(ArmourType.armours.size() > 0)
 			{
 				//Give a completely random piece of armour
 				ArmourType armour = ArmourType.armours.get(event.getWorld().rand.nextInt(ArmourType.armours.size()));

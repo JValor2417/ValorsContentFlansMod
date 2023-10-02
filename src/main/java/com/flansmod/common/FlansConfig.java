@@ -31,7 +31,14 @@ public final class FlansConfig {
 	@Name("Enable Enchantment Module")
 	@Comment("Whether or not to enable gun-related enchantments added by Flan's Mod")
 	public static boolean enchantmentModuleEnabled = true;
-	
+
+	@Name("Mob Armor Spawn Chance")
+	@Comment({
+			"The probability that mobs will spawn with Flan's Mod armor.",
+			"Currently this is limited to Zombies and Skeletons.",
+			"0 to prevent mobs from spawning with Flan's Armor, 1 = 100%."
+	})
+	public static float armourSpawnRate = 0.125F;
 	
 	public static class ClientCategory {
 		@Name("Shoot on Right Click")
