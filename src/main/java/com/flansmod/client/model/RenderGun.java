@@ -142,7 +142,9 @@ public class RenderGun implements CustomItemRenderer
 						GlStateManager.rotate(0F - 5F * adsSwitch, 0F, 0F, 1F);
 						
 						GlStateManager.translate(-1F, 0.675F + 0.180F * adsSwitch, -1F - 0.395F * adsSwitch);
-						if(gunType.hasScopeOverlay)
+						if(gunType.hasScopeOverlay && gunType.overlayUnrendersGun())
+							// Not entirely sure why this is here to be honest.
+							// Seems to only run in cases when the gun doesn't actually render
 							GlStateManager.translate(-0.7F * adsSwitch, -0.12F * adsSwitch, -0.05F * adsSwitch);
 						GlStateManager.rotate(4.5F * adsSwitch, 0F, 0F, 1F);
 						GlStateManager.translate(0F, -0.03F * adsSwitch, 0F);
