@@ -39,6 +39,13 @@ public final class FlansConfig {
 			"0 to prevent mobs from spawning with Flan's Armor, 1 = 100%."
 	})
 	public static float armourSpawnRate = 0.125F;
+
+	@Name("Add Flan's Loot to Vanilla Chests")
+	@Comment({
+			"Whether or not to spawn Flan's mod items in vanilla chests",
+			"such as chests found in villages, pyramids, etc"
+	})
+	public static boolean spawnLootInVanillaChests = true;
 	
 	public static class ClientCategory {
 		@Name("Shoot on Right Click")

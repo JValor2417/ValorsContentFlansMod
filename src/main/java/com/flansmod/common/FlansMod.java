@@ -421,12 +421,13 @@ public class FlansMod
 	public void registerLoot(LootTableLoadEvent event)
 	{		
 		// Add default Flan's loot - extra gunpowder, iron etc
-		if(event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+		if(FlansConfig.spawnLootInVanillaChests &&
+		(event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
 		|| event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)
 		|| event.getName().equals(LootTableList.CHESTS_END_CITY_TREASURE)
 		|| event.getName().equals(LootTableList.CHESTS_NETHER_BRIDGE)
 		|| event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID)
-		)
+		))
 		{
 			for(InfoType type : InfoType.infoTypes.values())
 			{
