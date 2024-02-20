@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.flansmod.common.util.RecoilCurve;
+import com.flansmod.common.vector.Vector2f;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +41,7 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The amount to recoil the player's view by when firing a single shot from this gun
 	 */
-	public int recoil;
+	public RecoilCurve recoil = RecoilCurve.DEFAULT;
 	/**
 	 * The amount that bullets spread out when fired from this gun
 	 */
@@ -360,7 +362,6 @@ public class GunType extends PaintableType implements IScope
 			damage = Read(split, "Damage", damage);
 			canForceReload = Read(split, "CanForceReload", canForceReload);
 			reloadTime = Read(split, "ReloadTime", reloadTime);
-			recoil = Read(split, "Recoil", recoil);
 			knockback = Read(split, "Knockback", knockback);
 			bulletSpread = Read(split, "Accuracy", bulletSpread);
 			bulletSpread = Read(split, "Spread", bulletSpread);
@@ -375,6 +376,23 @@ public class GunType extends PaintableType implements IScope
 				meleeDamage = Float.parseFloat(split[1]);
 				if(meleeDamage > 0F)
 					secondaryFunction = EnumSecondaryFunction.MELEE;
+			}
+			else if (split[0].equals("Recoil"))
+			{
+				if (split.length == 6) {
+					float endPointX = Float.parseFloat(split[1]);
+					float endPointY = Float.parseFloat(split[2]);
+					float controlPointX = Float.parseFloat(split[3]);
+					float controlPointY = Float.parseFloat(split[4]);
+					int bulletCount = Integer.parseInt(split[5]);
+					recoil = new RecoilCurve(endPointX, endPointY, controlPointX, controlPointY, bulletCount);
+				}
+				else
+				{
+					FlansMod.log.warn(file.name + " has legacy recoil curve!");
+					float y = Float.parseFloat(split[1]);
+					recoil = new RecoilCurve(0, y, 0, y / 2, 1);
+				}
 			}
 			
 			//Information
@@ -811,12 +829,12 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * Get the recoil of a specific gun, taking into account attachments
 	 */
-	public float getRecoil(ItemStack stack)
+	public Vector2f getRecoil(ItemStack stack, int step)
 	{
-		float stackRecoil = recoil;
+		Vector2f stackRecoil = recoil.get(step);
 		for(AttachmentType attachment : getCurrentAttachments(stack))
 		{
-			stackRecoil *= attachment.recoilMultiplier;
+			stackRecoil.scale(attachment.recoilMultiplier);
 		}
 		return stackRecoil;
 	}

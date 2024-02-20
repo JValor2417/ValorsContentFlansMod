@@ -223,7 +223,7 @@ public class RenderGun implements CustomItemRenderer
 					//GlStateManager.rotate(60f, 0f, 0f, 1f);
 					//GlStateManager.translate(0.25f, 0.25f, -0.5f);
 					
-					GlStateManager.rotate(-animations.recoilAngle * (float)Math.sqrt(gunType.recoil) * 1.5f, 0F, 0F, 1F);
+					GlStateManager.rotate(-animations.recoilAngle * (float)Math.sqrt(gunType.recoil.get(1).y) * 1.5f, 0F, 0F, 1F);
 					GlStateManager.translate(animations.recoilOffset.x, animations.recoilOffset.y, animations.recoilOffset.z);
 					
 					if(model.spinningCocking)

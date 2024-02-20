@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.flansmod.common.*;
+import com.flansmod.common.vector.Vector2f;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Multimap;
@@ -88,6 +89,7 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 	
 	private int soundDelay = 0;
+	private int recoilStep = 1;
 
 	private static boolean rightMouseHeld;
 	private static boolean lastRightMouseHeld;
@@ -347,6 +349,7 @@ public class ItemGun extends Item implements IPaintableItem
 		Boolean hold = GetMouseHeld(hand);
 		Boolean held = GetLastMouseHeld(hand);
 
+
 		//Switch Delay
 		if (player.inventory.currentItem != data.lastInventorySlot) {
 			ItemStack stackCurrent = player.getHeldItemMainhand();
@@ -473,12 +476,17 @@ public class ItemGun extends Item implements IPaintableItem
 			if(needsToReload)
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketReload(hand, false));
+				recoilStep = 1;
 			}
 			// Fire!
 			else if(shouldShootThisTick)
 			{
 				shoot(hand, player, gunstack, data, world, animations);
 				ConsumeClick(hand);
+			}
+			else if(!hold)
+			{
+				recoilStep = 1;
 			}
 		}
 	}
@@ -617,9 +625,10 @@ public class ItemGun extends Item implements IPaintableItem
 						}
 						
 						animations.doShoot(type.getPumpDelay(), type.getPumpTime());
-						Float recoil = type.getRecoil(gunstack);
-						FlansModClient.playerRecoil += recoil;
-						animations.recoil += recoil;
+						Vector2f recoil = type.getRecoil(gunstack, recoilStep);
+						recoilStep++;
+						Vector2f.add(FlansModClient.playerRecoil, recoil, FlansModClient.playerRecoil);
+						animations.recoil += recoil.y;
 
 						int burstRounds = data.GetBurstRoundsRemaining(hand);
 						if (burstRounds > 0) {
@@ -1158,7 +1167,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(type.showDamage)
 			lines.add(String.format("\u00a79Damage:\u00a77 %.2f", type.getDamage(stack)));
 		if(type.showRecoil)
-			lines.add(String.format("\u00a79Recoil:\u00a77 %.2f", type.getRecoil(stack)));
+			lines.add(String.format("\u00a79Recoil:\u00a77 %.2f", 1f));
 		if(type.showSpread)
 			lines.add(String.format("\u00a79Accuracy:\u00a77 %.2f", type.getSpread(stack)));
 		if(type.showReloadTime)

@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.flansmod.common.vector.Vector2f;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
@@ -73,11 +74,11 @@ public class FlansModClient extends FlansMod
 	/**
 	 * The recoil applied to the player view by shooting
 	 */
-	public static float playerRecoil;
+	public static Vector2f playerRecoil = new Vector2f(0, 0);
 	/**
 	 * The amount of compensation to apply to the recoil in order to bring it back to normal
 	 */
-	public static float antiRecoil;
+	public static Vector2f antiRecoil = new Vector2f(0, 0);
 	
 	// Gun animations
 	/**
@@ -281,15 +282,18 @@ public class FlansModClient extends FlansMod
 		// Guns
 		if(scopeTime > 0)
 			scopeTime--;
-		if(playerRecoil > 0)
-			playerRecoil *= 0.8F;
+		if(playerRecoil.lengthSquared() > 0)
+			playerRecoil.scale(0.8F);
 		if(hitMarkerTime > 0)
 			hitMarkerTime--;
-		minecraft.player.rotationPitch -= playerRecoil;
-		antiRecoil += playerRecoil;
-		
-		minecraft.player.rotationPitch += antiRecoil * 0.2F;
-		antiRecoil *= 0.8F;
+		minecraft.player.rotationPitch -= playerRecoil.y;
+		minecraft.player.rotationYaw += playerRecoil.x;
+
+		Vector2f.add(antiRecoil, playerRecoil, antiRecoil);
+
+		minecraft.player.rotationPitch += antiRecoil.y * 0.2F;
+		minecraft.player.rotationYaw -= antiRecoil.x * 0.2F;
+		antiRecoil.scale(0.8F);
 		
 		// Update gun animations for the gun in hand
 		for(GunAnimations g : gunAnimationsRight.values())
