@@ -294,7 +294,7 @@ public class GuiDriveableCrafting extends GuiScreen
 						engines.get(partType).setCount(engines.get(partType).getCount() + itemStack.getCount());
 					}
 					//Else, make this the first stack
-					else engines.put(partType, itemStack);
+					else engines.put(partType, itemStack.copy());
 				}
 			}
 		}
