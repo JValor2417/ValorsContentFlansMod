@@ -572,7 +572,7 @@ public class ItemGun extends Item implements IPaintableItem
 						break;
 					}
 				}
-				
+
 				if(bulletStack.isEmpty())
 				{
 					continue;
@@ -627,7 +627,7 @@ public class ItemGun extends Item implements IPaintableItem
 						animations.doShoot(type.getPumpDelay(), type.getPumpTime());
 						Vector2f recoil = type.getRecoil(gunstack, recoilStep);
 						recoilStep++;
-						Vector2f.add(FlansModClient.playerRecoil, recoil, FlansModClient.playerRecoil);
+						FlansModClient.addRecoil(recoil);
 						animations.recoil += recoil.y;
 
 						int burstRounds = data.GetBurstRoundsRemaining(hand);

@@ -114,9 +114,8 @@ public class GunAnimations
 		
 		float scale = 0.5f;
 		float offsetScale = 0.005f;
-		
-		if(recoil > 0)
-			recoil *= 0.5F;
+
+		recoil *= 0.5F;
 		
 		recoilVelocity.x += (random.nextGaussian() - 0.5f) * recoil * offsetScale;
 		recoilVelocity.y += (random.nextGaussian() - 0.5f) * recoil * offsetScale;

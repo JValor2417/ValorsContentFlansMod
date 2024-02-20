@@ -74,7 +74,7 @@ public class FlansModClient extends FlansMod
 	/**
 	 * The recoil applied to the player view by shooting
 	 */
-	public static Vector2f playerRecoil = new Vector2f(0, 0);
+	private static Vector2f playerRecoil = new Vector2f(0, 0);
 	/**
 	 * The amount of compensation to apply to the recoil in order to bring it back to normal
 	 */
@@ -282,14 +282,14 @@ public class FlansModClient extends FlansMod
 		// Guns
 		if(scopeTime > 0)
 			scopeTime--;
-		if(playerRecoil.lengthSquared() > 0)
-			playerRecoil.scale(0.8F);
 		if(hitMarkerTime > 0)
 			hitMarkerTime--;
-		minecraft.player.rotationPitch -= playerRecoil.y;
-		minecraft.player.rotationYaw += playerRecoil.x;
-
-		Vector2f.add(antiRecoil, playerRecoil, antiRecoil);
+		if(playerRecoil.lengthSquared() > 0) {
+			playerRecoil.scale(0.8F);
+			minecraft.player.rotationPitch -= playerRecoil.y;
+			minecraft.player.rotationYaw += playerRecoil.x;
+			Vector2f.add(antiRecoil, playerRecoil, antiRecoil);
+		}
 
 		minecraft.player.rotationPitch += antiRecoil.y * 0.2F;
 		minecraft.player.rotationYaw -= antiRecoil.x * 0.2F;
@@ -660,5 +660,9 @@ public class FlansModClient extends FlansMod
 					mc.world.checkLightFor(EnumSkyBlock.BLOCK, posToUpdate);
 				}
 			});
+	}
+
+	public static void addRecoil(Vector2f amount) {
+		playerRecoil.translate(amount.x, amount.y);
 	}
 }

@@ -7,11 +7,13 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 
+import com.flansmod.common.vector.Vector2f;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumHand;
+import org.apache.logging.log4j.core.appender.rolling.action.IfLastModified;
 
 public class PacketGunAnimation extends PacketBase
 {
@@ -167,7 +169,7 @@ public class PacketGunAnimation extends PacketBase
 				//TODO lookatstate not send by Server, may cause problems in future
 				animations.lookAt = LookAtState.NONE;
 				animations.doShoot(pumpdelay, pumptime);
-				FlansModClient.playerRecoil.translate(0, recoil);
+				FlansModClient.addRecoil(new Vector2f(0, recoil));
 				animations.recoil += recoil;
 				break;
 			

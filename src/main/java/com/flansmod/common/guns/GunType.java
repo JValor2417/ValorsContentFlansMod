@@ -380,18 +380,17 @@ public class GunType extends PaintableType implements IScope
 			else if (split[0].equals("Recoil"))
 			{
 				if (split.length == 6) {
-					float endPointX = Float.parseFloat(split[1]);
-					float endPointY = Float.parseFloat(split[2]);
-					float controlPointX = Float.parseFloat(split[3]);
-					float controlPointY = Float.parseFloat(split[4]);
+					float controlPointX = Float.parseFloat(split[1]);
+					float controlPointY = Float.parseFloat(split[2]);
+					float endPointX = Float.parseFloat(split[3]);
+					float endPointY = Float.parseFloat(split[4]);
 					int bulletCount = Integer.parseInt(split[5]);
-					recoil = new RecoilCurve(endPointX, endPointY, controlPointX, controlPointY, bulletCount);
+					recoil = new RecoilCurve(controlPointX, controlPointY, endPointX, endPointY, bulletCount);
 				}
 				else
 				{
-					FlansMod.log.warn(file.name + " has legacy recoil curve!");
 					float y = Float.parseFloat(split[1]);
-					recoil = new RecoilCurve(0, y, 0, y / 2, 1);
+					recoil = new RecoilCurve(0, y / 2, 0, y, 1);
 				}
 			}
 			
