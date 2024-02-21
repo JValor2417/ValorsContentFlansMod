@@ -1167,7 +1167,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(type.showDamage)
 			lines.add(String.format("\u00a79Damage:\u00a77 %.2f", type.getDamage(stack)));
 		if(type.showRecoil)
-			lines.add(String.format("\u00a79Recoil:\u00a77 %.2f", type.recoil.get(1).ye));
+			lines.add(String.format("\u00a79Recoil:\u00a77 %.2f", type.recoil.get(1).y));
 		if(type.showSpread)
 			lines.add(String.format("\u00a79Accuracy:\u00a77 %.2f", type.getSpread(stack)));
 		if(type.showReloadTime)
